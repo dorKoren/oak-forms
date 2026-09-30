@@ -1,14 +1,8 @@
 import { Link } from "react-router-dom";
-import type { FormListItem as FormListItemType } from "@/api/forms";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { formatDate } from "../../HomePage.utils";
+import type { FormListItem as FormListItemType } from "@/api/forms";
+import { Card, CardTitle, CardHeader, CardContent, CardDescription } from "@/components/ui/card";
 
 type FormListItemProps = {
   form: FormListItemType;
@@ -33,21 +27,13 @@ export default function FormListItem({ form }: FormListItemProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-wrap gap-2 pt-0">
-        <Button
-          variant="outline"
-          size="sm"
-          render={<Link to={`/forms/${form.id}/edit`} />}
-        >
+        <Button variant="outline" size="sm" render={<Link to={`/forms/${form.id}/edit`} />}>
           Edit
         </Button>
         <Button variant="ghost" size="sm" render={<Link to={`/forms/${form.id}`} />}>
           Fill
         </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          render={<Link to={`/forms/${form.id}/responses`} />}
-        >
+        <Button variant="ghost" size="sm" render={<Link to={`/forms/${form.id}/responses`} />}>
           Responses
         </Button>
       </CardContent>

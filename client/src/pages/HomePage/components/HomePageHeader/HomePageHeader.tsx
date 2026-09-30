@@ -1,5 +1,5 @@
-import { OakLogo } from "@/components/brand/OakLogo";
 import { Button } from "@/components/ui/button";
+import { OakLogo } from "@/components/brand/OakLogo";
 
 type HomePageHeaderProps = {
   onCreate: () => void;
@@ -14,9 +14,7 @@ export default function HomePageHeader({ onCreate, isCreating }: HomePageHeaderP
           <OakLogo className="h-9 text-foreground" />
           <span>Forms</span>
         </h1>
-        <p className="text-lg text-muted-foreground">
-          Build, share, and collect responses.
-        </p>
+        <p className="text-lg text-muted-foreground">Build, share, and collect responses.</p>
       </div>
       <Button type="button" onClick={onCreate} disabled={isCreating}>
         {isCreating ? "Creating…" : "New form"}
