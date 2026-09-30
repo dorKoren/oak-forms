@@ -1,0 +1,56 @@
+import { Link } from "react-router-dom";
+import type { FormListItem as FormListItemType } from "@/api/forms";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { formatDate } from "../../HomePage.utils";
+
+type FormListItemProps = {
+  form: FormListItemType;
+};
+
+export default function FormListItem({ form }: FormListItemProps) {
+  return (
+    <Card className="shadow-none transition-colors hover:border-ring/60">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-xl">
+          <Link
+            to={`/forms/${form.id}/edit`}
+            className="hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {form.title}
+          </Link>
+        </CardTitle>
+        <CardDescription>
+          Updated {formatDate(form.updatedAt)} · {form.questions.length} question
+          {form.questions.length === 1 ? "" : "s"} · {form.submissionCount} response
+          {form.submissionCount === 1 ? "" : "s"}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex flex-wrap gap-2 pt-0">
+        <Button
+          variant="outline"
+          size="sm"
+          render={<Link to={`/forms/${form.id}/edit`} />}
+        >
+          Edit
+        </Button>
+        <Button variant="ghost" size="sm" render={<Link to={`/forms/${form.id}`} />}>
+          Fill
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          render={<Link to={`/forms/${form.id}/responses`} />}
+        >
+          Responses
+        </Button>
+      </CardContent>
+    </Card>
+  );
+}

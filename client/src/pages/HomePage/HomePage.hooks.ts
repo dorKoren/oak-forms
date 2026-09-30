@@ -1,5 +1,4 @@
 import { toast } from "@/components/ui/toast";
-import { formatDate } from "./HomePage.utils";
 import { useNavigate } from "react-router-dom";
 import { useCreateFormMutation, useFormsQuery } from "@/api";
 
@@ -30,7 +29,6 @@ export function useHomePage() {
     isError,
     isLoading: isPending,
     isCreating: createForm.isPending,
-    formatDate,
     createNewForm,
   };
 }
