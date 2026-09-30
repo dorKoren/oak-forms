@@ -22,8 +22,6 @@ type FormFieldProps<
   children: (
     field: ControllerRenderProps<TFieldValues, TName> & {
       id: string;
-      invalid: boolean;
-      describedBy?: string;
       "aria-invalid"?: boolean;
       "aria-describedby"?: string;
     },
@@ -67,8 +65,6 @@ export default function FormField<
             {children({
               ...field,
               id: baseId,
-              invalid: fieldState.invalid,
-              describedBy: describedBy || undefined,
               "aria-invalid": fieldState.invalid || undefined,
               "aria-describedby": describedBy || undefined,
             })}
