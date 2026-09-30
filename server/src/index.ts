@@ -1,18 +1,19 @@
-import cors from "cors";
-import express from "express";
+import { createApp } from "./app";
+import { seedSampleForm } from "./seed";
+import { store } from "./store";
 
-const app = express();
 const PORT = process.env.PORT ?? 3001;
 
-app.use(cors({ origin: "http://localhost:5173" }));
-app.use(express.json());
+if (process.env.NODE_ENV !== "test") {
+  seedSampleForm();
+}
 
-app.get("/api/health", (_req, res) => {
-  res.json({ ok: true });
-});
+const app = createApp(store);
 
-app.listen(PORT, () => {
-  console.log(`API listening on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(PORT, () => {
+    console.log(`API listening on http://localhost:${PORT}`);
+  });
+}
 
 export { app };
