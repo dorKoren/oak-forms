@@ -6,6 +6,7 @@ import { ResponsesHeader } from "./components/ResponsesHeader";
 import { ResponsesLoadError } from "./components/ResponsesLoadError";
 import { ResponsesEmptyState } from "./components/ResponsesEmptyState";
 import { ResponsesMissingFormId } from "./components/ResponsesMissingFormId";
+import { ResponsesAnalytics } from "./components/ResponsesAnalytics";
 
 export default function ResponsesPage() {
   const {
@@ -41,7 +42,9 @@ export default function ResponsesPage() {
       {submissions.length === 0 ? (
         <ResponsesEmptyState formId={formId} />
       ) : (
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        <>
+          <ResponsesAnalytics form={form} submissions={submissions} />
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
           <ResponsesTable
             form={form}
             selectedId={selectedId}
@@ -56,7 +59,8 @@ export default function ResponsesPage() {
               submission={selectedSubmission}
             />
           ) : null}
-        </div>
+          </div>
+        </>
       )}
     </div>
   );
