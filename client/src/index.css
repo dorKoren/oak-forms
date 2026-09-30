@@ -1,12 +1,46 @@
-* {
-  box-sizing: border-box;
+@import "tailwindcss";
+
+@theme inline {
+  --font-headline: "Newsreader", ui-serif, Georgia, serif;
+  --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --color-background: #fcf9f5;
+  --color-foreground: #1e1e1e;
+  --color-card: #ffffff;
+  --color-card-foreground: #1e1e1e;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #1e1e1e;
+  --color-primary: #983c17;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #4e6353;
+  --color-secondary-foreground: #ffffff;
+  --color-muted: #f5f2eb;
+  --color-muted-foreground: #636059;
+  --color-accent: #f5f2eb;
+  --color-accent-foreground: #1e1e1e;
+  --color-destructive: #ba1a1a;
+  --color-border: #e4dfd5;
+  --color-input: #e4dfd5;
+  --color-ring: #b8532d;
+
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
 }
 
-body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
-}
+@layer base {
+  * {
+    @apply border-border;
+  }
 
-.app {
-  padding: 2rem;
+  body {
+    @apply bg-background text-foreground font-[family-name:var(--font-body)] antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-[family-name:var(--font-headline)] font-normal tracking-tight text-foreground;
+  }
 }

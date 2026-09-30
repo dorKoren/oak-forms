@@ -1,9 +1,11 @@
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "node:path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-  plugins: [react()],
+  // Root + workspace can resolve different Vite type versions; runtime is fine.
+  plugins: [react(), tailwindcss()] as import("vite").PluginOption[],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

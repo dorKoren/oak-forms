@@ -1,8 +1,11 @@
+import { RouterProvider } from "react-router-dom";
+import { AppProviders } from "@/app/providers";
+import { router } from "@/app/router";
+
 export function App() {
   return (
-    <main className="app">
-      <h1>OAK Forms</h1>
-      <p>Scaffold ready.</p>
-    </main>
+    <AppProviders>
+      <RouterProvider router={router} />
+    </AppProviders>
   );
 }
