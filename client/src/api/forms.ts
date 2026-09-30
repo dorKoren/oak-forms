@@ -9,9 +9,15 @@ import {
 import { z } from "zod";
 import { apiRequest } from "./client";
 
-const formListSchema = z.array(formSchema);
+const formListItemSchema = formSchema.extend({
+  submissionCount: z.number().int().nonnegative(),
+});
 
-export async function listForms(): Promise<Form[]> {
+const formListSchema = z.array(formListItemSchema);
+
+export type FormListItem = z.infer<typeof formListItemSchema>;
+
+export async function listForms(): Promise<FormListItem[]> {
   const data = await apiRequest<unknown>("/api/forms");
   return formListSchema.parse(data);
 }
