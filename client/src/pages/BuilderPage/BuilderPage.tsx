@@ -1,10 +1,9 @@
 import { useBuilderPage } from "./BuilderPage.hooks";
 import { BuilderHeader } from "./components/BuilderHeader";
-import { PageLoadingSkeleton } from "@/components/feedback";
 import { QuestionEditor } from "./components/QuestionEditor";
-import { BuilderLoadError } from "./components/BuilderLoadError";
 import { AddQuestionControl } from "./components/AddQuestionControl";
 import { BuilderMissingFormId } from "./components/BuilderMissingFormId";
+import { LoadErrorCard, PageLoadingSkeleton } from "@/components/feedback";
 
 export default function BuilderPage() {
   const {
@@ -40,7 +39,13 @@ export default function BuilderPage() {
   }
 
   if (isError) {
-    return <BuilderLoadError error={error} />;
+    return (
+      <LoadErrorCard
+        title="Could not load form"
+        error={error}
+        className="mx-auto mt-12 max-w-3xl"
+      />
+    );
   }
 
   return (
