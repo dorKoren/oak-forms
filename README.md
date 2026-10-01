@@ -28,7 +28,7 @@ npm run dev
 | Client    | http://localhost:5173    |
 | API       | http://localhost:3001    |
 
-The Vite dev server proxies `/api` to the API. On first API start, a sample form **Client Creative Brief** is seeded in memory.
+The Vite dev server proxies `/api` to the API. The API keeps forms in memory only (empty until you create one; data is lost on restart).
 
 ## Scripts
 
