@@ -1,5 +1,5 @@
-import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { Input } from "@/components/ui/input";
 
 export default function NumberInput({
   className,
@@ -14,4 +14,3 @@ export default function NumberInput({
     />
   );
 }
-

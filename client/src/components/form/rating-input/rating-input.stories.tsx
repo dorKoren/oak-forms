@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { FieldLabel } from "@/components/design-system/atoms";
+import { FieldLabel } from "@/components/form";
 import RatingInput from "./rating-input";
 
 const meta = {
-  title: "Design System/Atoms/RatingInput",
+  title: "Form/RatingInput",
   component: RatingInput,
   tags: ["autodocs"],
 } satisfies Meta<typeof RatingInput>;

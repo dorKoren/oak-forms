@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { FieldLabel } from "@/components/design-system/atoms";
-import NumberInput from "./number-input";
+import TextInput from "./text-input";
+import { FieldLabel } from "@/components/form";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
 const meta = {
-  title: "Design System/Atoms/NumberInput",
-  component: NumberInput,
+  title: "Form/TextInput",
+  component: TextInput,
   tags: ["autodocs"],
-} satisfies Meta<typeof NumberInput>;
+} satisfies Meta<typeof TextInput>;
 
 export default meta;
 
@@ -18,11 +18,12 @@ export const Default: Story = {
     const [value, setValue] = useState("");
     return (
       <div className="max-w-md space-y-2">
-        <FieldLabel htmlFor="amount">Amount</FieldLabel>
-        <NumberInput
-          id="amount"
+        <FieldLabel htmlFor="short-text">Short answer</FieldLabel>
+        <TextInput
+          id="short-text"
           value={value}
           onChange={(event) => setValue(event.target.value)}
+          placeholder="Your answer"
         />
       </div>
     );

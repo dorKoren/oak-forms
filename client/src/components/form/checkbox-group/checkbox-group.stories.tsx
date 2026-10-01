@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { FieldLabel } from "@/components/design-system/atoms";
-import SelectInput from "./select-input";
+import { FieldLabel } from "@/components/form";
+import CheckboxGroup from "./checkbox-group";
 
 const options = [
   { id: "a", label: "Option A" },
@@ -10,7 +10,7 @@ const options = [
 ];
 
 const meta = {
-  title: "Design System/Atoms/SelectInput",
+  title: "Form/CheckboxGroup",
   tags: ["autodocs"],
 } satisfies Meta;
 
@@ -20,11 +20,12 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   render: () => {
-    const [value, setValue] = useState<string | undefined>();
+    const [value, setValue] = useState<string[]>([]);
     return (
       <div className="max-w-md space-y-2">
-        <FieldLabel>Choose one</FieldLabel>
-        <SelectInput
+        <FieldLabel>Select all that apply</FieldLabel>
+        <CheckboxGroup
+          id="prefs"
           options={options}
           value={value}
           onValueChange={setValue}

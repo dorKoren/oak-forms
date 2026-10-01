@@ -9,7 +9,7 @@ import {
   RatingInput,
   SelectInput,
   CheckboxGroup,
-} from "@/components/design-system";
+} from "@/components/form";
 
 type FillQuestionFieldProps<T extends FieldValues> = {
   question: Question;

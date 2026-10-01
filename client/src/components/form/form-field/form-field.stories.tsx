@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import FormField from "./form-field";
-import { TextInput } from "@/components/design-system/atoms";
+import { TextInput } from "@/components/form";
 
 const schema = z.object({
   email: z.string().min(1, "Required").email("Enter a valid email"),
@@ -13,7 +13,7 @@ const schema = z.object({
 type Values = z.infer<typeof schema>;
 
 const meta = {
-  title: "Design System/Molecules/FormField",
+  title: "Form/FormField",
   tags: ["autodocs"],
 } satisfies Meta;
 

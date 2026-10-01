@@ -66,11 +66,26 @@ oak-forms/
 
 ### Client conventions
 
-- **Pages** — feature folders (`HomePage/`, `BuilderPage/`, `FillPage/`, `ResponsesPage/`) with `Page.tsx`, hooks, utils, and `components/`
-- **Design system** — `client/src/components/design-system/` (form atoms + `FormField`)
-- **UI** — shadcn (`base-nova`) in `client/src/components/ui/`
-- **Feedback** — load/error/status in `client/src/components/feedback/` (not DS)
+- **Pages** — feature folders (`HomePage/`, `BuilderPage/`, `FillPage/`, `ResponsesPage/`) with `Page.tsx`, hooks, utils, and page-local `components/`
+- **UI** — shadcn primitives (`base-nova`) in `client/src/components/ui/` (managed by the shadcn CLI; do not mix with app components)
+- **Form** — shared form controls and `FormField` in `client/src/components/form/`
+- **Feedback** — load/error/skeleton states in `client/src/components/feedback/`
+- **Navigation** — shared nav chrome in `client/src/components/navigation/`
+- **Brand** — logos and brand assets in `client/src/components/brand/`
 - **API** — `client/src/api/` + TanStack Query hooks
+
+#### Where to put a new component
+
+1. **shadcn / base primitive** → `components/ui/` (`npx shadcn add …`)
+2. **Used by one page only** → `pages/<Page>/components/<Name>/`
+3. **Shared across pages** → `components/<purpose>/`:
+   - `form` — inputs, labels, RHF field wrappers
+   - `feedback` — loading, errors, empty-page status
+   - `navigation` — breadcrumbs, nav helpers
+   - `brand` — Oak logo and brand-only UI
+4. Promote from a page folder to `components/` only when a second page needs it.
+
+Import shared form pieces from `@/components/form` (barrel), not deep paths.
 
 ### Routes
 

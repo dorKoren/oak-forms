@@ -1,13 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { FieldLabel } from "@/components/design-system/atoms";
-import DateInput from "./date-input";
+import { FieldLabel } from "@/components/form";
+import TextArea from "./text-area";
 
 const meta = {
-  title: "Design System/Atoms/DateInput",
-  component: DateInput,
+  title: "Form/TextArea",
+  component: TextArea,
   tags: ["autodocs"],
-} satisfies Meta<typeof DateInput>;
+} satisfies Meta<typeof TextArea>;
 
 export default meta;
 
@@ -18,11 +18,12 @@ export const Default: Story = {
     const [value, setValue] = useState("");
     return (
       <div className="max-w-md space-y-2">
-        <FieldLabel htmlFor="event-date">Date</FieldLabel>
-        <DateInput
-          id="event-date"
+        <FieldLabel htmlFor="paragraph">Long answer</FieldLabel>
+        <TextArea
+          id="paragraph"
           value={value}
           onChange={(event) => setValue(event.target.value)}
+          placeholder="Write a few sentences…"
         />
       </div>
     );

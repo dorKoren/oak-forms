@@ -1,12 +1,12 @@
+import { cn } from "@/lib/utils";
 import type { Option } from "@oak-forms/shared";
 import {
   Select,
-  SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
+  SelectContent,
+  SelectTrigger,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 
 type SelectInputProps = {
   options: Option[];
@@ -54,4 +54,3 @@ export default function SelectInput({
     </Select>
   );
 }
-
