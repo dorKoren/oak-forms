@@ -55,6 +55,7 @@ export default function BuilderPage() {
         status={draft.status}
         onTitleChange={setTitle}
         onCopyShareLink={copyShareLink}
+        hasQuestions={draft.questions.length > 0}
       />
 
       <div className="flex flex-col gap-4">

@@ -46,10 +46,11 @@ export function useBuilderPage() {
     savedContentKey.current !== null &&
     formContentKey(draft) !== savedContentKey.current;
 
-  const canShare = draft !== null && isFormPublished(draft) && !isDirty;
+  const hasQuestions = (draft?.questions.length ?? 0) > 0;
+  const canShare = draft !== null && isFormPublished(draft) && !isDirty && hasQuestions;
 
   const saveForm = () => {
-    if (!draft || !formId) return;
+    if (!draft || !formId || draft.questions.length === 0) return;
 
     updateForm.mutate(
       {

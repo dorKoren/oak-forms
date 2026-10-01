@@ -24,10 +24,11 @@ import {
 type BuilderHeaderProps = {
   title: string;
   formId: string;
-  status: FormStatus;
   isDirty: boolean;
   canShare: boolean;
   isSaving: boolean;
+  status: FormStatus;
+  hasQuestions: boolean;
   onSave: () => void;
   onCopyShareLink: () => void;
   onTitleChange: (title: string) => void;
@@ -40,6 +41,7 @@ export default function BuilderHeader({
   isDirty,
   canShare,
   isSaving,
+  hasQuestions,
   onSave,
   onTitleChange,
   onCopyShareLink,
@@ -48,12 +50,15 @@ export default function BuilderHeader({
   const deleteForm = useDeleteFormMutation();
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const canSave = isDirty || !isFormPublished({ status });
-  const shareDisabledReason = !isFormPublished({ status })
-    ? "Save the form to publish and share a link."
-    : isDirty
-      ? "Save your changes before sharing."
-      : null;
+  const hasPendingSave = isDirty || !isFormPublished({ status });
+  const canSave = hasPendingSave && hasQuestions;
+  const shareDisabledReason = !hasQuestions
+    ? "Add at least one question before you can save and share."
+    : !isFormPublished({ status })
+      ? "Save the form to publish and share a link."
+      : isDirty
+        ? "Save your changes before sharing."
+        : null;
 
   const handleConfirmDelete = () => {
     deleteForm.mutate(formId, {
@@ -72,7 +77,9 @@ export default function BuilderHeader({
           {isFormPublished({ status }) ? "Published" : "Draft"}
         </Badge>
         {isDirty ? (
-          <Badge variant="outline" className="text-muted-foreground">Unsaved changes</Badge>
+          <Badge variant="outline" className="text-muted-foreground">
+            Unsaved changes
+          </Badge>
         ) : null}
       </div>
 
@@ -99,8 +106,8 @@ export default function BuilderHeader({
           <Tooltip>
             <TooltipTrigger
               render={
-                <span className="inline-flex">
-                  <Button type="button" variant="outline" disabled>
+                <span className="inline-flex cursor-not-allowed">
+                  <Button type="button" variant="outline" disabled className="pointer-events-none">
                     Copy share link
                   </Button>
                 </span>
@@ -114,24 +121,29 @@ export default function BuilderHeader({
           </Button>
         )}
 
-        <Button
-          type="button"
-          variant="ghost"
-          disabled={!canShare}
-          nativeButton={false}
-          render={
-            <Link
-              to={`/forms/${formId}`}
-              target="_blank"
-              rel="noreferrer"
-              aria-disabled={!canShare}
-              tabIndex={canShare ? 0 : -1}
-              className={!canShare ? "pointer-events-none" : undefined}
+        {canShare ? (
+          <Button
+            type="button"
+            variant="ghost"
+            nativeButton={false}
+            render={<Link to={`/forms/${formId}`} target="_blank" rel="noreferrer" />}
+          >
+            Preview fill
+          </Button>
+        ) : (
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <span className="inline-flex cursor-not-allowed">
+                  <Button type="button" variant="ghost" disabled className="pointer-events-none">
+                    Preview fill
+                  </Button>
+                </span>
+              }
             />
-          }
-        >
-          Preview fill
-        </Button>
+            <TooltipContent>{shareDisabledReason}</TooltipContent>
+          </Tooltip>
+        )}
 
         <Button
           type="button"
