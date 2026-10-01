@@ -9,3 +9,6 @@ export { SelectInput } from "./select-input";
 export { CheckboxGroup } from "./checkbox-group";
 export { RadioGroupInput } from "./radio-group-input";
 export { MultiSelectInput } from "./multi-select-input";
+export { SelectField } from "./select-field";
+export { SwitchField } from "./switch-field";
+export { NumberField } from "./number-field";

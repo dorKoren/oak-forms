@@ -1,27 +1,13 @@
 import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { questionHasOptions } from "../../BuilderPage.utils";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import {
-  type Question,
-  type QuestionType,
-  QUESTION_TYPES,
-  QUESTION_TYPE_LABELS,
-} from "@oak-forms/shared";
-import {
-  Select,
-  SelectItem,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-} from "@/components/ui/select";
+import { NumberField, SwitchField } from "@/components/form";
+import type { Question, QuestionType } from "@oak-forms/shared";
+import QuestionToolbarButton from "./QuestionToolbarButton";
+import QuestionTypeSelect from "./QuestionTypeSelect";
+import QuestionOptionsSection from "./QuestionOptionsSection";
 
 type QuestionEditorProps = {
   question: Question;
@@ -38,25 +24,6 @@ type QuestionEditorProps = {
   onRequiredChange: (required: boolean) => void;
   onOptionLabelChange: (optionId: string, label: string) => void;
 };
-
-function QuestionToolbarButton({
-  label,
-  children,
-  ...props
-}: React.ComponentProps<typeof Button> & { label: string }) {
-  return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <Button type="button" size="icon-sm" variant="ghost" aria-label={label} {...props} />
-        }
-      >
-        {children}
-      </TooltipTrigger>
-      <TooltipContent>{label}</TooltipContent>
-    </Tooltip>
-  );
-}
 
 export default function QuestionEditor({
   total,
@@ -111,86 +78,37 @@ export default function QuestionEditor({
         />
 
         <div className="flex flex-wrap items-end gap-6">
-          <Field className="min-w-[12rem] flex-1">
-            <FieldLabel>Type</FieldLabel>
-            <Select
-              value={question.type}
-              onValueChange={(value) => onTypeChange(value as QuestionType)}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue>{QUESTION_TYPE_LABELS[question.type]}</SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {QUESTION_TYPES.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {QUESTION_TYPE_LABELS[type]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </Field>
+          <QuestionTypeSelect
+            value={question.type}
+            onValueChange={onTypeChange}
+            className="min-w-[12rem] flex-1"
+          />
 
-          <Field orientation="horizontal" className="items-center">
-            <Switch
-              id={`required-${question.id}`}
-              checked={question.required}
-              onCheckedChange={(checked) => onRequiredChange(checked === true)}
-            />
-            <FieldLabel htmlFor={`required-${question.id}`} className="font-normal">
-              Required
-            </FieldLabel>
-          </Field>
+          <SwitchField
+            label="Required"
+            id={`required-${question.id}`}
+            checked={question.required}
+            onCheckedChange={onRequiredChange}
+          />
         </div>
 
         {question.type === "rating" ? (
-          <Field className="max-w-xs">
-            <FieldLabel htmlFor={`max-${question.id}`}>Max rating</FieldLabel>
-            <Input
-              min={1}
-              max={10}
-              type="number"
-              value={question.max}
-              id={`max-${question.id}`}
-              onChange={(e) => onRatingMaxChange(Number.parseInt(e.target.value, 10) || 5)}
-            />
-          </Field>
+          <NumberField
+            label="Max rating"
+            id={`max-${question.id}`}
+            min={1}
+            max={10}
+            value={question.max}
+            onValueChange={(max) => onRatingMaxChange(max || 5)}
+          />
         ) : null}
 
-        {questionHasOptions(question) ? (
-          <div className="flex flex-col gap-2">
-            <Label>Options</Label>
-            <Separator />
-            {question.options.map((option) => (
-              <div key={option.id} className="flex gap-2">
-                <Input
-                  value={option.label}
-                  onChange={(e) => onOptionLabelChange(option.id, e.target.value)}
-                  aria-label="Option label"
-                />
-                <Tooltip>
-                  <TooltipTrigger
-                    render={
-                      <Button
-                        type="button"
-                        size="icon-sm"
-                        variant="ghost"
-                        aria-label="Remove option"
-                        disabled={question.options.length <= 1}
-                        onClick={() => onRemoveOption(option.id)}
-                      />
-                    }
-                  >
-                    <Trash2 />
-                  </TooltipTrigger>
-                  <TooltipContent>Remove option</TooltipContent>
-                </Tooltip>
-              </div>
-            ))}
-            <Button type="button" variant="outline" size="sm" onClick={onAddOption}>
-              Add option
-            </Button>
-          </div>
-        ) : null}
+        <QuestionOptionsSection
+          question={question}
+          onAddOption={onAddOption}
+          onRemoveOption={onRemoveOption}
+          onOptionLabelChange={onOptionLabelChange}
+        />
       </CardContent>
     </Card>
   );
