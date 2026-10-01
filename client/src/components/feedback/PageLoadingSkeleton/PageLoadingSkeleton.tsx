@@ -4,13 +4,19 @@ import { cn } from "@/lib/utils";
 type PageLoadingSkeletonProps = {
   variant: "home" | "builder" | "fill" | "responses";
   className?: string;
+  /** Omit page chrome (padding / max-width) when the parent layout already provides it. */
+  bare?: boolean;
 };
 
-export default function PageLoadingSkeleton({ variant, className }: PageLoadingSkeletonProps) {
-  return (
-    <div className={cn("mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-12", className)}>
-      <Skeleton className="h-4 w-48" />
-      <Skeleton className="h-10 w-full max-w-md" />
+export default function PageLoadingSkeleton({
+  variant,
+  className,
+  bare = false,
+}: PageLoadingSkeletonProps) {
+  const body = (
+    <>
+      {!bare ? <Skeleton className="h-4 w-48" /> : null}
+      {!bare ? <Skeleton className="h-10 w-full max-w-md" /> : null}
       {variant === "home" ? (
         <div className="flex flex-col gap-4">
           <Skeleton className="h-28 w-full rounded-xl" />
@@ -33,6 +39,16 @@ export default function PageLoadingSkeleton({ variant, className }: PageLoadingS
           <Skeleton className="h-64 w-full rounded-xl" />
         </div>
       ) : null}
+    </>
+  );
+
+  if (bare) {
+    return <div className={cn("flex w-full flex-col gap-4", className)}>{body}</div>;
+  }
+
+  return (
+    <div className={cn("mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-12", className)}>
+      {body}
     </div>
   );
 }

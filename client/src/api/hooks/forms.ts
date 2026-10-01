@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { CreateFormInput, UpdateFormInput } from "@oak-forms/shared";
+import { isApiNotFound } from "../client";
 import * as formsApi from "../forms";
 import { queryKeys } from "../query-keys";
 
@@ -15,6 +16,10 @@ export function useFormQuery(formId: string) {
     queryKey: queryKeys.forms.detail(formId),
     queryFn: () => formsApi.getForm(formId),
     enabled: Boolean(formId),
+    retry: (failureCount, error) => {
+      if (isApiNotFound(error)) return false;
+      return failureCount < 3;
+    },
   });
 }
 

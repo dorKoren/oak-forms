@@ -1,3 +1,4 @@
+import { isApiNotFound } from "@/api";
 import { Link } from "react-router-dom";
 import { InboxIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,10 +8,11 @@ import { ResponsesTable } from "./components/ResponsesTable";
 import { ResponsesHeader } from "./components/ResponsesHeader";
 import { ResponsesAnalytics } from "./components/ResponsesAnalytics";
 import {
-  PageStatus,
+  FormNotFoundState,
   LoadErrorCard,
   PageEmptyState,
   PageLoadingSkeleton,
+  PageStatus,
 } from "@/components/feedback";
 
 export default function ResponsesPage() {
@@ -30,9 +32,10 @@ export default function ResponsesPage() {
 
   if (!formId) return <PageStatus>Missing form id.</PageStatus>;
 
-  if (isLoading || !form) return <PageLoadingSkeleton variant="responses" />;
-
   if (isError) {
+    if (isApiNotFound(error)) {
+      return <FormNotFoundState className="max-w-5xl" />;
+    }
     return (
       <LoadErrorCard
         error={error}
@@ -41,6 +44,8 @@ export default function ResponsesPage() {
       />
     );
   }
+
+  if (isLoading || !form) return <PageLoadingSkeleton variant="responses" />;
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-12">

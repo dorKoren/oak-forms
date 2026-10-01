@@ -12,6 +12,10 @@ export class ApiError extends Error {
   }
 }
 
+export function isApiNotFound(error: unknown): boolean {
+  return error instanceof ApiError && error.status === 404;
+}
+
 export async function apiRequest<T>(
   path: string,
   init?: RequestInit,

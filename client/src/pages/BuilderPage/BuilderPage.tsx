@@ -1,9 +1,10 @@
+import { isApiNotFound } from "@/api";
 import { useBuilderPage } from "./BuilderPage.hooks";
 import { BuilderHeader } from "./components/BuilderHeader";
 import { QuestionListItem } from "./components/QuestionListItem";
 import { AddQuestionControl } from "./components/AddQuestionControl";
 import { BuilderMissingFormId } from "./components/BuilderMissingFormId";
-import { LoadErrorCard, PageLoadingSkeleton } from "@/components/feedback";
+import { FormNotFoundState, LoadErrorCard, PageLoadingSkeleton } from "@/components/feedback";
 
 export default function BuilderPage() {
   const {
@@ -32,15 +33,24 @@ export default function BuilderPage() {
 
   if (!formId) return <BuilderMissingFormId />;
 
-  if (isLoading || !draft) return <PageLoadingSkeleton variant="builder" className="max-w-3xl" />;
-
   if (isError) {
+    if (isApiNotFound(error)) {
+      return <FormNotFoundState />;
+    }
     return (
       <LoadErrorCard
         title="Could not load form"
         error={error}
         className="mx-auto mt-12 max-w-3xl"
       />
+    );
+  }
+
+  if (isLoading || !draft) {
+    return (
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-6 py-12">
+        <PageLoadingSkeleton variant="builder" bare />
+      </div>
     );
   }
 
@@ -75,9 +85,7 @@ export default function BuilderPage() {
             onRemoveOption={(optionId) => removeOption(question.id, optionId)}
             onRatingMaxChange={(max) => setQuestionRatingMax(question.id, max)}
             onRequiredChange={(required) => setQuestionRequired(question.id, required)}
-            onOptionLabelChange={(optionId, label) =>
-              setOptionLabel(question.id, optionId, label)
-            }
+            onOptionLabelChange={(optionId, label) => setOptionLabel(question.id, optionId, label)}
           />
         ))}
       </div>
