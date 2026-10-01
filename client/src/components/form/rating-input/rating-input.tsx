@@ -41,7 +41,7 @@ export default function RatingInput({
             aria-checked={value === rating}
             disabled={disabled}
             className={cn(
-              "rounded-md p-1 transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50",
+              "cursor-pointer rounded-md p-1 transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
               selected ? "text-primary" : "text-muted-foreground hover:text-foreground",
             )}
             onClick={() => onValueChange?.(rating)}

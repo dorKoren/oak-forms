@@ -88,6 +88,7 @@ function analyticsForQuestion(
       };
     }
     case "select":
+    case "radio":
     case "multi_select":
     case "checkboxes": {
       const optionCounts = new Map<string, number>();

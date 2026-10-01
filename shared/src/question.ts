@@ -29,6 +29,11 @@ const selectQuestionSchema = questionBaseSchema.extend({
   options: z.array(optionSchema).min(1),
 });
 
+const radioQuestionSchema = questionBaseSchema.extend({
+  type: z.literal("radio"),
+  options: z.array(optionSchema).min(1),
+});
+
 const multiSelectQuestionSchema = questionBaseSchema.extend({
   type: z.literal("multi_select"),
   options: z.array(optionSchema).min(1),
@@ -50,6 +55,7 @@ export const questionSchema = z.discriminatedUnion("type", [
   numberQuestionSchema,
   dateQuestionSchema,
   selectQuestionSchema,
+  radioQuestionSchema,
   multiSelectQuestionSchema,
   checkboxesQuestionSchema,
   ratingQuestionSchema,
@@ -71,6 +77,7 @@ export function createDefaultQuestion(type: Question["type"], id: string): Quest
     case "date":
       return { ...base, type: "date" };
     case "select":
+    case "radio":
     case "multi_select":
     case "checkboxes":
       return {

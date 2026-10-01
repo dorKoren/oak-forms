@@ -11,7 +11,7 @@ type FormListItemProps = {
 
 export default function FormListItem({ form }: FormListItemProps) {
   return (
-    <Card className="shadow-none transition-colors hover:border-ring/60">
+    <Card className="shadow-none">
       <CardHeader className="pb-2">
         <CardTitle className="text-xl">
           <Link

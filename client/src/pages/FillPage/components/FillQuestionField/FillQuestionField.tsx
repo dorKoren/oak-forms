@@ -9,6 +9,8 @@ import {
   RatingInput,
   SelectInput,
   CheckboxGroup,
+  RadioGroupInput,
+  MultiSelectInput,
 } from "@/components/form";
 
 type FillQuestionFieldProps<T extends FieldValues> = {
@@ -54,7 +56,28 @@ export default function FillQuestionField<T extends FieldValues>({
                 aria-describedby={field["aria-describedby"]}
               />
             );
+          case "radio":
+            return (
+              <RadioGroupInput
+                options={question.options}
+                value={field.value ?? undefined}
+                onValueChange={field.onChange}
+                id={field.id}
+                aria-invalid={field["aria-invalid"]}
+                aria-describedby={field["aria-describedby"]}
+              />
+            );
           case "multi_select":
+            return (
+              <MultiSelectInput
+                options={question.options}
+                value={field.value ?? []}
+                onValueChange={field.onChange}
+                id={field.id}
+                aria-invalid={field["aria-invalid"]}
+                aria-describedby={field["aria-describedby"]}
+              />
+            );
           case "checkboxes":
             return (
               <CheckboxGroup

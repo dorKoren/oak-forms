@@ -31,7 +31,11 @@ export function formatAnswerForDisplay(
       .join(", ");
   }
 
-  if (question && "options" in question && question.type === "select") {
+  if (
+    question &&
+    "options" in question &&
+    (question.type === "select" || question.type === "radio")
+  ) {
     return question.options.find((o) => o.id === value)?.label ?? String(value);
   }
 

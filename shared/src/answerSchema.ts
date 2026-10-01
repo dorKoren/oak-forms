@@ -7,7 +7,8 @@ function schemaForQuestion(question: Question): z.ZodTypeAny {
     case "short_text":
     case "paragraph":
     case "date":
-    case "select": {
+    case "select":
+    case "radio": {
       const base = z.string();
       return question.required ? base.min(1, "Required") : base.optional();
     }

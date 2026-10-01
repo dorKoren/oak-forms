@@ -68,6 +68,24 @@ describe("buildAnswerSchema", () => {
     expect(schema.safeParse({ q1: 4 }).success).toBe(true);
   });
 
+  it("requires radio selection when required", () => {
+    const form = baseForm([
+      {
+        id: "q1",
+        type: "radio",
+        title: "Pick one",
+        required: true,
+        options: [
+          { id: "a", label: "A" },
+          { id: "b", label: "B" },
+        ],
+      },
+    ]);
+    const schema = buildAnswerSchema(form);
+    expect(schema.safeParse({ q1: "" }).success).toBe(false);
+    expect(schema.safeParse({ q1: "a" }).success).toBe(true);
+  });
+
   it("accepts ISO date strings for date fields", () => {
     const form = baseForm([
       { id: "q1", type: "date", title: "When", required: true },

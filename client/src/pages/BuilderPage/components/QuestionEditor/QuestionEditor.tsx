@@ -118,7 +118,7 @@ export default function QuestionEditor({
               onValueChange={(value) => onTypeChange(value as QuestionType)}
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                <SelectValue>{QUESTION_TYPE_LABELS[question.type]}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {QUESTION_TYPES.map((type) => (

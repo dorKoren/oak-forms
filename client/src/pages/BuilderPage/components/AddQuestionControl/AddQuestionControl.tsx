@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { QUESTION_TYPES, QUESTION_TYPE_LABELS, type QuestionType } from "@oak-forms/shared";
 import {
   Select,
@@ -33,10 +32,6 @@ export default function AddQuestionControl({ onAdd }: AddQuestionControlProps) {
           ))}
         </SelectContent>
       </Select>
-
-      <Button type="button" variant="outline" onClick={() => onAdd("short_text")}>
-        Quick add short text
-      </Button>
     </div>
   );
 }

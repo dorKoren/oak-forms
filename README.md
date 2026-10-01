@@ -9,7 +9,7 @@ A small Google Forms–style app: create forms in a builder, share a fill link, 
 - **Fill** — dynamic Zod validation from the form schema, submit answers
 - **Responses** — table + detail, delete with confirmation, KPIs for ratings, numbers, and choice questions
 
-Question types: short text, paragraph, number, date, select, multi-select, checkboxes, rating.
+Question types: short text, paragraph, number, date, select, radio buttons, multi-select (dropdown), checkboxes, rating.
 
 ## Prerequisites
 

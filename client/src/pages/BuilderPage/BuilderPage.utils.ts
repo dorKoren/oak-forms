@@ -48,6 +48,7 @@ export function questionHasOptions(
 ): question is Question & { options: { id: string; label: string }[] } {
   return (
     question.type === "select" ||
+    question.type === "radio" ||
     question.type === "multi_select" ||
     question.type === "checkboxes"
   );
