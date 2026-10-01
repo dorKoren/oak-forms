@@ -4,6 +4,7 @@ import { isFormPublished } from "@oak-forms/shared";
 import { useEffect, useRef, useState } from "react";
 import type { Form, QuestionType } from "@oak-forms/shared";
 import { useFormQuery, useUpdateFormMutation } from "@/api";
+import { transitionUpdate } from "@/app/viewTransition";
 import {
   addQuestion,
   moveQuestion,
@@ -80,19 +81,25 @@ export function useBuilderPage() {
   };
 
   const addQuestionOfType = (type: QuestionType) => {
-    setDraft((prev) => (prev ? { ...prev, questions: addQuestion(prev.questions, type) } : prev));
+    transitionUpdate(() => {
+      setDraft((prev) => (prev ? { ...prev, questions: addQuestion(prev.questions, type) } : prev));
+    });
   };
 
   const removeQuestionById = (questionId: string) => {
-    setDraft((prev) =>
-      prev ? { ...prev, questions: removeQuestion(prev.questions, questionId) } : prev,
-    );
+    transitionUpdate(() => {
+      setDraft((prev) =>
+        prev ? { ...prev, questions: removeQuestion(prev.questions, questionId) } : prev,
+      );
+    });
   };
 
   const moveQuestionById = (questionId: string, direction: "up" | "down") => {
-    setDraft((prev) =>
-      prev ? { ...prev, questions: moveQuestion(prev.questions, questionId, direction) } : prev,
-    );
+    transitionUpdate(() => {
+      setDraft((prev) =>
+        prev ? { ...prev, questions: moveQuestion(prev.questions, questionId, direction) } : prev,
+      );
+    });
   };
 
   const setQuestionTitle = (questionId: string, title: string) => {
@@ -124,16 +131,18 @@ export function useBuilderPage() {
   };
 
   const setQuestionType = (questionId: string, type: QuestionType) => {
-    setDraft((prev) =>
-      prev
-        ? {
-            ...prev,
-            questions: updateQuestion(prev.questions, questionId, (q) =>
-              changeQuestionType(q, type),
-            ),
-          }
-        : prev,
-    );
+    transitionUpdate(() => {
+      setDraft((prev) =>
+        prev
+          ? {
+              ...prev,
+              questions: updateQuestion(prev.questions, questionId, (q) =>
+                changeQuestionType(q, type),
+              ),
+            }
+          : prev,
+      );
+    });
   };
 
   const setQuestionRatingMax = (questionId: string, max: number) => {
@@ -167,38 +176,42 @@ export function useBuilderPage() {
   };
 
   const addOption = (questionId: string) => {
-    setDraft((prev) =>
-      prev
-        ? {
-            ...prev,
-            questions: updateQuestion(prev.questions, questionId, (q) => {
-              if (!questionHasOptions(q)) return q;
-              const optionId = crypto.randomUUID();
-              return {
-                ...q,
-                options: [...q.options, { id: optionId, label: "New option" }],
-              };
-            }),
-          }
-        : prev,
-    );
+    transitionUpdate(() => {
+      setDraft((prev) =>
+        prev
+          ? {
+              ...prev,
+              questions: updateQuestion(prev.questions, questionId, (q) => {
+                if (!questionHasOptions(q)) return q;
+                const optionId = crypto.randomUUID();
+                return {
+                  ...q,
+                  options: [...q.options, { id: optionId, label: "New option" }],
+                };
+              }),
+            }
+          : prev,
+      );
+    });
   };
 
   const removeOption = (questionId: string, optionId: string) => {
-    setDraft((prev) =>
-      prev
-        ? {
-            ...prev,
-            questions: updateQuestion(prev.questions, questionId, (q) => {
-              if (!questionHasOptions(q) || q.options.length <= 1) return q;
-              return {
-                ...q,
-                options: q.options.filter((opt) => opt.id !== optionId),
-              };
-            }),
-          }
-        : prev,
-    );
+    transitionUpdate(() => {
+      setDraft((prev) =>
+        prev
+          ? {
+              ...prev,
+              questions: updateQuestion(prev.questions, questionId, (q) => {
+                if (!questionHasOptions(q) || q.options.length <= 1) return q;
+                return {
+                  ...q,
+                  options: q.options.filter((opt) => opt.id !== optionId),
+                };
+              }),
+            }
+          : prev,
+      );
+    });
   };
 
   const copyShareLink = async () => {

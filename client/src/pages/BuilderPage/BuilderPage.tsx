@@ -1,6 +1,6 @@
 import { useBuilderPage } from "./BuilderPage.hooks";
 import { BuilderHeader } from "./components/BuilderHeader";
-import { QuestionEditor } from "./components/QuestionEditor";
+import { QuestionListItem } from "./components/QuestionListItem";
 import { AddQuestionControl } from "./components/AddQuestionControl";
 import { BuilderMissingFormId } from "./components/BuilderMissingFormId";
 import { LoadErrorCard, PageLoadingSkeleton } from "@/components/feedback";
@@ -61,9 +61,9 @@ export default function BuilderPage() {
 
       <div className="flex flex-col gap-4">
         {draft.questions.map((question, index) => (
-          <QuestionEditor
-            index={index}
+          <QuestionListItem
             key={question.id}
+            index={index}
             question={question}
             total={draft.questions.length}
             onAddOption={() => addOption(question.id)}
@@ -75,7 +75,9 @@ export default function BuilderPage() {
             onRemoveOption={(optionId) => removeOption(question.id, optionId)}
             onRatingMaxChange={(max) => setQuestionRatingMax(question.id, max)}
             onRequiredChange={(required) => setQuestionRequired(question.id, required)}
-            onOptionLabelChange={(optionId, label) => setOptionLabel(question.id, optionId, label)}
+            onOptionLabelChange={(optionId, label) =>
+              setOptionLabel(question.id, optionId, label)
+            }
           />
         ))}
       </div>

@@ -1,3 +1,4 @@
+import { ViewTransition } from "react";
 import { Trash2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -29,30 +30,38 @@ export default function QuestionOptionsSection({
       <Label>Options</Label>
       <Separator />
       {question.options.map((option) => (
-        <div key={option.id} className="flex gap-2">
-          <Input
-            value={option.label}
-            onChange={(e) => onOptionLabelChange(option.id, e.target.value)}
-            aria-label="Option label"
-          />
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  type="button"
-                  size="icon-sm"
-                  variant="ghost"
-                  aria-label="Remove option"
-                  disabled={question.options.length <= 1}
-                  onClick={() => onRemoveOption(option.id)}
-                />
-              }
-            >
-              <Trash2 />
-            </TooltipTrigger>
-            <TooltipContent>Remove option</TooltipContent>
-          </Tooltip>
-        </div>
+        <ViewTransition
+          key={option.id}
+          enter="vt-fade"
+          exit="vt-fade"
+          update="none"
+          default="none"
+        >
+          <div className="flex gap-2">
+            <Input
+              value={option.label}
+              onChange={(e) => onOptionLabelChange(option.id, e.target.value)}
+              aria-label="Option label"
+            />
+            <Tooltip>
+              <TooltipTrigger
+                render={
+                  <Button
+                    type="button"
+                    size="icon-sm"
+                    variant="ghost"
+                    aria-label="Remove option"
+                    disabled={question.options.length <= 1}
+                    onClick={() => onRemoveOption(option.id)}
+                  />
+                }
+              >
+                <Trash2 />
+              </TooltipTrigger>
+              <TooltipContent>Remove option</TooltipContent>
+            </Tooltip>
+          </div>
+        </ViewTransition>
       ))}
       <Button type="button" variant="outline" size="sm" onClick={onAddOption}>
         Add option

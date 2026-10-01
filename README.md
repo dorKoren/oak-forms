@@ -73,6 +73,7 @@ oak-forms/
 - **Navigation** — shared nav chrome in `client/src/components/navigation/`
 - **Brand** — logos and brand assets in `client/src/components/brand/`
 - **API** — `client/src/api/` + TanStack Query hooks
+- **View transitions** — `<ViewTransition>` (React 19.3+) + `transitionUpdate()` ([`client/src/app/viewTransition.ts`](client/src/app/viewTransition.ts))
 
 #### Where to put a new component
 

@@ -5,6 +5,7 @@ import { toast } from "@/components/ui/toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { buildAnswerSchema } from "@oak-forms/shared";
 import { buildDefaultAnswers } from "./FillPage.utils";
+import { transitionUpdate } from "@/app/viewTransition";
 import { useCreateSubmissionMutation, useFormQuery } from "@/api";
 
 export function useFillPage() {
@@ -38,7 +39,7 @@ export function useFillPage() {
       { answers: answers as Record<string, string | number | string[]> },
       {
         onSuccess: () => {
-          setSubmitted(true);
+          transitionUpdate(() => setSubmitted(true));
           toast.add({ title: "Response recorded", type: "success" });
         },
         onError: () => {
