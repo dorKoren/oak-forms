@@ -1,10 +1,17 @@
+import { Link } from "react-router-dom";
+import { InboxIcon } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { useResponsesPage } from "./ResponsesPage.hooks";
 import { ResponseDetail } from "./components/ResponseDetail";
 import { ResponsesTable } from "./components/ResponsesTable";
 import { ResponsesHeader } from "./components/ResponsesHeader";
 import { ResponsesAnalytics } from "./components/ResponsesAnalytics";
-import { ResponsesEmptyState } from "./components/ResponsesEmptyState";
-import { LoadErrorCard, PageLoadingSkeleton, PageStatus } from "@/components/feedback";
+import {
+  PageStatus,
+  LoadErrorCard,
+  PageEmptyState,
+  PageLoadingSkeleton,
+} from "@/components/feedback";
 
 export default function ResponsesPage() {
   const {
@@ -40,7 +47,15 @@ export default function ResponsesPage() {
       <ResponsesHeader formId={formId} title={form.title} responseCount={submissions.length} />
 
       {submissions.length === 0 ? (
-        <ResponsesEmptyState formId={formId} />
+        <PageEmptyState
+          icon={<InboxIcon />}
+          title="No responses yet"
+          description="Share the fill link to start collecting answers for this form."
+        >
+          <Button variant="outline" nativeButton={false} render={<Link to={`/forms/${formId}`} />}>
+            Open fill link
+          </Button>
+        </PageEmptyState>
       ) : (
         <>
           <ResponsesAnalytics form={form} submissions={submissions} />

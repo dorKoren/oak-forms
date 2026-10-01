@@ -1,8 +1,10 @@
+import { FileTextIcon } from "lucide-react";
 import { useHomePage } from "./HomePage.hooks";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { FormsList } from "./components/FormsList";
 import { HomePageHeader } from "./components/HomePageHeader";
-import { FormsEmptyState } from "./components/FormsEmptyState";
-import { LoadErrorCard, PageLoadingSkeleton } from "@/components/feedback";
+import { LoadErrorCard, PageEmptyState, PageLoadingSkeleton } from "@/components/feedback";
 
 export default function HomePage() {
   const { forms, error, isError, isLoading, isCreating, showHeaderCreateButton, createNewForm } =
@@ -21,7 +23,22 @@ export default function HomePage() {
       {!isLoading && isError ? <LoadErrorCard title="Could not load forms" error={error} /> : null}
 
       {!isLoading && !isError && forms?.length === 0 ? (
-        <FormsEmptyState onCreate={createNewForm} isCreating={isCreating} />
+        <PageEmptyState
+          icon={<FileTextIcon />}
+          title="No forms yet"
+          description="Create your first form to add questions and share a link."
+        >
+          <Button type="button" onClick={createNewForm} disabled={isCreating}>
+            {isCreating ? (
+              <>
+                <Spinner data-icon="inline-start" className="size-3.5" />
+                Creating…
+              </>
+            ) : (
+              "Create a form"
+            )}
+          </Button>
+        </PageEmptyState>
       ) : null}
 
       {!isLoading && !isError && forms && forms.length > 0 ? <FormsList forms={forms} /> : null}

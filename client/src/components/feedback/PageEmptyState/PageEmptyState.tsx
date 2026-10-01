@@ -1,27 +1,34 @@
-import { ClipboardListIcon } from "lucide-react";
+import type { ReactNode } from "react";
 import {
   Empty,
   EmptyMedia,
   EmptyTitle,
   EmptyHeader,
+  EmptyContent,
   EmptyDescription,
 } from "@/components/ui/empty";
 
-type FillEmptyStateProps = {
+type PageEmptyStateProps = {
+  icon: ReactNode;
   title: string;
   description: string;
+  children?: ReactNode;
 };
 
-export default function FillEmptyState({ title, description }: FillEmptyStateProps) {
+export default function PageEmptyState({
+  icon,
+  title,
+  children,
+  description,
+}: PageEmptyStateProps) {
   return (
     <Empty className="border">
       <EmptyHeader>
-        <EmptyMedia variant="icon">
-          <ClipboardListIcon />
-        </EmptyMedia>
+        <EmptyMedia variant="icon">{icon}</EmptyMedia>
         <EmptyTitle>{title}</EmptyTitle>
         <EmptyDescription>{description}</EmptyDescription>
       </EmptyHeader>
+      {children ? <EmptyContent>{children}</EmptyContent> : null}
     </Empty>
   );
 }
