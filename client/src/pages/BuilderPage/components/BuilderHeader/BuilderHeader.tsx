@@ -1,23 +1,14 @@
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import SaveFormButton from "./SaveFormButton";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import type { FormStatus } from "@oak-forms/shared";
+import PreviewFillButton from "./PreviewFillButton";
+import DeleteAlertDialog from "./DeleteAlertDialog";
+import CopyShareLinkButton from "./CopyShareLinkButton";
 import { useBuilderHeaderActions } from "./BuilderHeader.hooks";
 import { AppBreadcrumb } from "@/components/navigation/AppBreadcrumb";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import {
-  AlertDialog,
-  AlertDialogTitle,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogTrigger,
-  AlertDialogDescription,
-} from "@/components/ui/alert-dialog";
 
 type BuilderHeaderProps = {
   title: string;
@@ -46,9 +37,9 @@ export default function BuilderHeader({
 }: BuilderHeaderProps) {
   const {
     canSave,
+    deleteOpen,
     isPublished,
     shareDisabledReason,
-    deleteOpen,
     setDeleteOpen,
     handleConfirmDelete,
     isDeleting,
@@ -76,59 +67,18 @@ export default function BuilderHeader({
       />
 
       <div className="flex flex-wrap gap-2">
-        <Button type="button" disabled={!canSave || isSaving} onClick={onSave}>
-          {isSaving ? (
-            <>
-              <Spinner data-icon="inline-start" className="size-3.5" />
-              Saving…
-            </>
-          ) : (
-            "Save"
-          )}
-        </Button>
+        <SaveFormButton canSave={canSave} isSaving={isSaving} onSave={onSave} />
 
-        {shareDisabledReason ? (
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <span className="inline-flex cursor-not-allowed">
-                  <Button type="button" variant="outline" disabled className="pointer-events-none">
-                    Copy share link
-                  </Button>
-                </span>
-              }
-            />
-            <TooltipContent>{shareDisabledReason}</TooltipContent>
-          </Tooltip>
-        ) : (
-          <Button type="button" variant="outline" onClick={onCopyShareLink}>
-            Copy share link
-          </Button>
-        )}
+        <CopyShareLinkButton
+          disabledReason={shareDisabledReason}
+          onCopyShareLink={onCopyShareLink}
+        />
 
-        {canShare ? (
-          <Button
-            type="button"
-            variant="ghost"
-            nativeButton={false}
-            render={<Link to={`/forms/${formId}`} target="_blank" rel="noreferrer" />}
-          >
-            Preview fill
-          </Button>
-        ) : (
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <span className="inline-flex cursor-not-allowed">
-                  <Button type="button" variant="ghost" disabled className="pointer-events-none">
-                    Preview fill
-                  </Button>
-                </span>
-              }
-            />
-            <TooltipContent>{shareDisabledReason}</TooltipContent>
-          </Tooltip>
-        )}
+        <PreviewFillButton
+          formId={formId}
+          canShare={canShare}
+          disabledReason={shareDisabledReason}
+        />
 
         <Button
           type="button"
@@ -139,45 +89,12 @@ export default function BuilderHeader({
           Responses
         </Button>
 
-        <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-          <AlertDialogTrigger
-            render={
-              <Button
-                type="button"
-                variant="destructive"
-                className="ml-auto"
-                disabled={isDeleting}
-              />
-            }
-          >
-            Delete form
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete this form?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This cannot be undone. The form and all responses will be permanently removed.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                variant="destructive"
-                disabled={isDeleting}
-                onClick={handleConfirmDelete}
-              >
-                {isDeleting ? (
-                  <>
-                    <Spinner data-icon="inline-start" className="size-3.5" />
-                    Deleting…
-                  </>
-                ) : (
-                  "Delete"
-                )}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <DeleteAlertDialog
+          open={deleteOpen}
+          isDeleting={isDeleting}
+          onOpenChange={setDeleteOpen}
+          onConfirmDelete={handleConfirmDelete}
+        />
       </div>
     </header>
   );
