@@ -5,11 +5,16 @@ import { FormsEmptyState } from "./components/FormsEmptyState";
 import { LoadErrorCard, PageLoadingSkeleton } from "@/components/feedback";
 
 export default function HomePage() {
-  const { forms, error, isError, isLoading, isCreating, createNewForm } = useHomePage();
+  const { forms, error, isError, isLoading, isCreating, showHeaderCreateButton, createNewForm } =
+    useHomePage();
 
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-6 py-12">
-      <HomePageHeader onCreate={createNewForm} isCreating={isCreating} />
+      <HomePageHeader
+        isCreating={isCreating}
+        onCreate={createNewForm}
+        showCreateButton={showHeaderCreateButton}
+      />
 
       {isLoading ? <PageLoadingSkeleton variant="home" className="px-0 py-0" /> : null}
 

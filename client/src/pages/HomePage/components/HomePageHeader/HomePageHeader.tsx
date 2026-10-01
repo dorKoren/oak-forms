@@ -5,9 +5,14 @@ import { OakLogo } from "@/components/brand/OakLogo";
 type HomePageHeaderProps = {
   onCreate: () => void;
   isCreating: boolean;
+  showCreateButton?: boolean;
 };
 
-export default function HomePageHeader({ onCreate, isCreating }: HomePageHeaderProps) {
+export default function HomePageHeader({
+  onCreate,
+  isCreating,
+  showCreateButton = true,
+}: HomePageHeaderProps) {
   return (
     <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div className="space-y-2">
@@ -17,16 +22,18 @@ export default function HomePageHeader({ onCreate, isCreating }: HomePageHeaderP
         </h1>
         <p className="text-lg text-muted-foreground">Build, share, and collect responses.</p>
       </div>
-      <Button type="button" onClick={onCreate} disabled={isCreating}>
-        {isCreating ? (
-          <>
-            <Spinner data-icon="inline-start" className="size-3.5" />
-            Creating…
-          </>
-        ) : (
-          "New form"
-        )}
-      </Button>
+      {showCreateButton ? (
+        <Button type="button" onClick={onCreate} disabled={isCreating}>
+          {isCreating ? (
+            <>
+              <Spinner data-icon="inline-start" className="size-3.5" />
+              Creating…
+            </>
+          ) : (
+            "New form"
+          )}
+        </Button>
+      ) : null}
     </header>
   );
 }

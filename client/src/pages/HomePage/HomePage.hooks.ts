@@ -23,12 +23,16 @@ export function useHomePage() {
     });
   };
 
+  const isLoading = isPending;
+  const showHeaderCreateButton = isLoading || isError || (forms !== undefined && forms.length > 0);
+
   return {
     forms,
     error,
     isError,
-    isLoading: isPending,
-    isCreating: createForm.isPending,
+    isLoading,
     createNewForm,
+    showHeaderCreateButton,
+    isCreating: createForm.isPending,
   };
 }
