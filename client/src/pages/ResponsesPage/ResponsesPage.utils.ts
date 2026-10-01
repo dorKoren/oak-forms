@@ -1,5 +1,9 @@
 import type { AnswerValue, Form, Question, Submission } from "@oak-forms/shared";
 
+export function formatResponseCount(count: number) {
+  return `${count} response${count === 1 ? "" : "s"}`;
+}
+
 export function formatSubmissionDateTime(iso: string) {
   return new Date(iso).toLocaleString(undefined, {
     month: "short",
