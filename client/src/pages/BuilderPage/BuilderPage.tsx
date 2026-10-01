@@ -30,13 +30,9 @@ export default function BuilderPage() {
     setQuestionRatingMax,
   } = useBuilderPage();
 
-  if (!formId) {
-    return <BuilderMissingFormId />;
-  }
+  if (!formId) return <BuilderMissingFormId />;
 
-  if (isLoading || !draft) {
-    return <PageLoadingSkeleton variant="builder" className="max-w-3xl" />;
-  }
+  if (isLoading || !draft) return <PageLoadingSkeleton variant="builder" className="max-w-3xl" />;
 
   if (isError) {
     return (

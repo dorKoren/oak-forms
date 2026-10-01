@@ -1,11 +1,10 @@
 import { useResponsesPage } from "./ResponsesPage.hooks";
-import { PageLoadingSkeleton } from "@/components/feedback";
 import { ResponseDetail } from "./components/ResponseDetail";
 import { ResponsesTable } from "./components/ResponsesTable";
 import { ResponsesHeader } from "./components/ResponsesHeader";
-import { ResponsesLoadError } from "./components/ResponsesLoadError";
 import { ResponsesAnalytics } from "./components/ResponsesAnalytics";
 import { ResponsesEmptyState } from "./components/ResponsesEmptyState";
+import { LoadErrorCard, PageLoadingSkeleton } from "@/components/feedback";
 import { ResponsesMissingFormId } from "./components/ResponsesMissingFormId";
 
 export default function ResponsesPage() {
@@ -23,16 +22,18 @@ export default function ResponsesPage() {
     deleteSelected,
   } = useResponsesPage();
 
-  if (!formId) {
-    return <ResponsesMissingFormId />;
-  }
+  if (!formId) return <ResponsesMissingFormId />;
 
-  if (isLoading || !form) {
-    return <PageLoadingSkeleton variant="responses" />;
-  }
+  if (isLoading || !form) return <PageLoadingSkeleton variant="responses" />;
 
   if (isError) {
-    return <ResponsesLoadError error={error} />;
+    return (
+      <LoadErrorCard
+        error={error}
+        title="Could not load responses"
+        className="mx-auto mt-12 max-w-5xl"
+      />
+    );
   }
 
   return (

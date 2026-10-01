@@ -11,13 +11,9 @@ export default function FillPage() {
   const { formId, form, isLoading, isError, error, submitted, control, onSubmit, isSubmitting } =
     useFillPage();
 
-  if (!formId) {
-    return <PageStatus>Missing form id.</PageStatus>;
-  }
+  if (!formId) return <PageStatus>Missing form id.</PageStatus>;
 
-  if (isLoading || !form) {
-    return <PageLoadingSkeleton variant="fill" className="max-w-3xl" />;
-  }
+  if (isLoading || !form) return <PageLoadingSkeleton variant="fill" className="max-w-3xl" />;
 
   if (isError) {
     return (
@@ -29,9 +25,7 @@ export default function FillPage() {
     );
   }
 
-  if (submitted) {
-    return <FillSubmittedView formTitle={form.title} />;
-  }
+  if (submitted) return <FillSubmittedView formTitle={form.title} />;
 
   if (!isFormPublished(form)) {
     return (
