@@ -1,9 +1,9 @@
-export { CheckboxGroup } from "./checkbox-group";
+export { TextArea } from "./text-area";
 export { DateInput } from "./date-input";
-export { FieldLabel } from "./field-label";
+export { TextInput } from "./text-input";
 export { FormField } from "./form-field";
+export { FieldLabel } from "./field-label";
 export { NumberInput } from "./number-input";
 export { RatingInput } from "./rating-input";
 export { SelectInput } from "./select-input";
-export { TextArea } from "./text-area";
-export { TextInput } from "./text-input";
+export { CheckboxGroup } from "./checkbox-group";
