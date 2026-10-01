@@ -5,6 +5,7 @@ import type { Form } from "./src/form";
 const baseForm = (questions: Form["questions"]): Form => ({
   id: "form-1",
   title: "Test",
+  status: "published",
   questions,
   createdAt: new Date().toISOString(),
   updatedAt: new Date().toISOString(),

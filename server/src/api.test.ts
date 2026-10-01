@@ -27,6 +27,7 @@ describe("API", () => {
     await request(app)
       .put(`/api/forms/${formId}`)
       .send({
+        status: "published",
         questions: [
           { id: "q1", type: "short_text", title: "Name", required: true },
         ],
@@ -51,6 +52,7 @@ describe("API", () => {
     await request(app)
       .put(`/api/forms/${formId}`)
       .send({
+        status: "published",
         questions: [
           { id: "q1", type: "short_text", title: "Name", required: true },
         ],
@@ -61,6 +63,26 @@ describe("API", () => {
       .post(`/api/forms/${formId}/submissions`)
       .send({ answers: { q1: "" } })
       .expect(400);
+  });
+
+  it("rejects submissions while form is draft", async () => {
+    const createRes = await request(app).post("/api/forms").send({}).expect(201);
+    const formId = createRes.body.id as string;
+    expect(createRes.body.status).toBe("draft");
+
+    await request(app)
+      .put(`/api/forms/${formId}`)
+      .send({
+        questions: [
+          { id: "q1", type: "short_text", title: "Name", required: true },
+        ],
+      })
+      .expect(200);
+
+    await request(app)
+      .post(`/api/forms/${formId}/submissions`)
+      .send({ answers: { q1: "Hello" } })
+      .expect(403);
   });
 
   it("returns 400 for malformed create form body", async () => {

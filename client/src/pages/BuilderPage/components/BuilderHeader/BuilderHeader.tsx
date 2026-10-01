@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { useDeleteFormMutation } from "@/api";
 import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Link, useNavigate } from "react-router-dom";
+import type { FormStatus } from "@oak-forms/shared";
+import { isFormPublished } from "@oak-forms/shared";
 import { AppBreadcrumb } from "@/components/navigation/AppBreadcrumb";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   AlertDialog,
   AlertDialogTitle,
@@ -20,7 +24,11 @@ import {
 type BuilderHeaderProps = {
   title: string;
   formId: string;
+  status: FormStatus;
+  isDirty: boolean;
+  canShare: boolean;
   isSaving: boolean;
+  onSave: () => void;
   onCopyShareLink: () => void;
   onTitleChange: (title: string) => void;
 };
@@ -28,13 +36,24 @@ type BuilderHeaderProps = {
 export default function BuilderHeader({
   formId,
   title,
+  status,
+  isDirty,
+  canShare,
   isSaving,
+  onSave,
   onTitleChange,
   onCopyShareLink,
 }: BuilderHeaderProps) {
   const navigate = useNavigate();
   const deleteForm = useDeleteFormMutation();
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const canSave = isDirty || !isFormPublished({ status });
+  const shareDisabledReason = !isFormPublished({ status })
+    ? "Save the form to publish and share a link."
+    : isDirty
+      ? "Save your changes before sharing."
+      : null;
 
   const handleConfirmDelete = () => {
     deleteForm.mutate(formId, {
@@ -49,11 +68,11 @@ export default function BuilderHeader({
     <header className="flex flex-col gap-4 border-b border-border pb-8">
       <div className="flex flex-wrap items-center gap-3">
         <AppBreadcrumb items={[{ label: "Home", to: "/" }, { label: "Edit form" }]} />
-        {isSaving ? (
-          <span className="ml-auto flex items-center gap-2 text-sm text-muted-foreground">
-            <Spinner className="size-3.5" />
-            Saving…
-          </span>
+        <Badge variant={isFormPublished({ status }) ? "secondary" : "outline"}>
+          {isFormPublished({ status }) ? "Published" : "Draft"}
+        </Badge>
+        {isDirty ? (
+          <Badge variant="outline" className="text-muted-foreground">Unsaved changes</Badge>
         ) : null}
       </div>
 
@@ -65,15 +84,51 @@ export default function BuilderHeader({
       />
 
       <div className="flex flex-wrap gap-2">
-        <Button type="button" variant="outline" onClick={onCopyShareLink}>
-          Copy share link
+        <Button type="button" disabled={!canSave || isSaving} onClick={onSave}>
+          {isSaving ? (
+            <>
+              <Spinner data-icon="inline-start" className="size-3.5" />
+              Saving…
+            </>
+          ) : (
+            "Save"
+          )}
         </Button>
+
+        {shareDisabledReason ? (
+          <Tooltip>
+            <TooltipTrigger
+              render={
+                <span className="inline-flex">
+                  <Button type="button" variant="outline" disabled>
+                    Copy share link
+                  </Button>
+                </span>
+              }
+            />
+            <TooltipContent>{shareDisabledReason}</TooltipContent>
+          </Tooltip>
+        ) : (
+          <Button type="button" variant="outline" onClick={onCopyShareLink}>
+            Copy share link
+          </Button>
+        )}
 
         <Button
           type="button"
           variant="ghost"
+          disabled={!canShare}
           nativeButton={false}
-          render={<Link to={`/forms/${formId}`} target="_blank" rel="noreferrer" />}
+          render={
+            <Link
+              to={`/forms/${formId}`}
+              target="_blank"
+              rel="noreferrer"
+              aria-disabled={!canShare}
+              tabIndex={canShare ? 0 : -1}
+              className={!canShare ? "pointer-events-none" : undefined}
+            />
+          }
         >
           Preview fill
         </Button>

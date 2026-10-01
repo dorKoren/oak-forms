@@ -1,6 +1,6 @@
-import { buildAnswerSchema, createSubmissionInputSchema } from "@oak-forms/shared";
-import { Router, type Request } from "express";
 import type { InMemoryStore } from "../store";
+import { Router, type Request } from "express";
+import { isFormPublished, buildAnswerSchema, createSubmissionInputSchema } from "@oak-forms/shared";
 
 type SubmissionRouteParams = {
   formId: string;
@@ -24,6 +24,10 @@ export function createSubmissionsRouter(store: InMemoryStore): Router {
     const form = store.getForm(formId);
     if (!form) {
       res.status(404).json({ error: "Form not found" });
+      return;
+    }
+    if (!isFormPublished(form)) {
+      res.status(403).json({ error: "Form is not published" });
       return;
     }
 

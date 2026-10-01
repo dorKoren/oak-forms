@@ -12,8 +12,11 @@ export default function BuilderPage() {
     error,
     formId,
     isError,
+    isDirty,
+    canShare,
     isSaving,
     isLoading,
+    saveForm,
     setTitle,
     addOption,
     removeOption,
@@ -44,8 +47,12 @@ export default function BuilderPage() {
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6 px-6 py-12">
       <BuilderHeader
         formId={formId}
+        onSave={saveForm}
+        isDirty={isDirty}
         title={draft.title}
+        canShare={canShare}
         isSaving={isSaving}
+        status={draft.status}
         onTitleChange={setTitle}
         onCopyShareLink={copyShareLink}
       />

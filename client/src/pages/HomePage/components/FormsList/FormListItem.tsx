@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "../../HomePage.utils";
+import { isFormPublished } from "@oak-forms/shared";
 import type { FormListItem as FormListItemType } from "@/api/forms";
 import { Card, CardTitle, CardHeader, CardContent, CardDescription } from "@/components/ui/card";
 
@@ -22,6 +23,7 @@ export default function FormListItem({ form }: FormListItemProps) {
           </Link>
         </CardTitle>
         <CardDescription className="flex flex-wrap items-center gap-2">
+          {!isFormPublished(form) ? <Badge variant="outline">Draft</Badge> : null}
           <Badge variant="outline">Updated {formatDate(form.updatedAt)}</Badge>
           <Badge variant="secondary">
             {form.questions.length} question{form.questions.length === 1 ? "" : "s"}
@@ -40,14 +42,20 @@ export default function FormListItem({ form }: FormListItemProps) {
         >
           Edit
         </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          nativeButton={false}
-          render={<Link to={`/forms/${form.id}`} />}
-        >
-          Fill
-        </Button>
+        {isFormPublished(form) ? (
+          <Button
+            variant="ghost"
+            size="sm"
+            nativeButton={false}
+            render={<Link to={`/forms/${form.id}`} />}
+          >
+            Fill
+          </Button>
+        ) : (
+          <Button variant="ghost" size="sm" disabled>
+            Fill
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="sm"

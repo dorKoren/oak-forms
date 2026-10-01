@@ -5,6 +5,7 @@ import type { Form } from "@oak-forms/shared";
 const form: Form = {
   id: "f1",
   title: "Survey",
+  status: "published",
   createdAt: "2025-01-01T00:00:00.000Z",
   updatedAt: "2025-01-01T00:00:00.000Z",
   questions: [

@@ -2,6 +2,7 @@ import { useFillPage } from "./FillPage.hooks";
 import { Button } from "@/components/ui/button";
 import { ClipboardListIcon } from "lucide-react";
 import { Spinner } from "@/components/ui/spinner";
+import { isFormPublished } from "@oak-forms/shared";
 import { FillPageShell } from "./components/FillPageShell";
 import { FillFormHeader } from "./components/FillFormHeader";
 import { FillQuestionField } from "./components/FillQuestionField";
@@ -39,6 +40,25 @@ export default function FillPage() {
 
   if (submitted) {
     return <FillSubmittedView formTitle={form.title} />;
+  }
+
+  if (!isFormPublished(form)) {
+    return (
+      <FillPageShell>
+        <Empty className="border">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <ClipboardListIcon />
+            </EmptyMedia>
+            <EmptyTitle>Form not available</EmptyTitle>
+            <EmptyDescription>
+              This form is still a draft. The owner needs to save it in the builder before you can
+              respond.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </FillPageShell>
+    );
   }
 
   return (

@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import { toast } from "@/components/ui/toast";
-import { useEffect, useRef, useState } from "react";
+import { isFormPublished } from "@oak-forms/shared";
 import type { Form, QuestionType } from "@oak-forms/shared";
 import { useFormQuery, useUpdateFormMutation } from "@/api";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   addQuestion,
   moveQuestion,
@@ -13,35 +13,54 @@ import {
   questionHasOptions,
 } from "./BuilderPage.utils";
 
-const SAVE_DEBOUNCE_MS = 600;
+function formContentKey(form: Pick<Form, "title" | "questions">): string {
+  return JSON.stringify({ title: form.title, questions: form.questions });
+}
 
 export function useBuilderPage() {
   const { id: formId = "" } = useParams<{ id: string }>();
   const { data, isPending, isError, error } = useFormQuery(formId);
   const updateForm = useUpdateFormMutation(formId);
   const [draft, setDraft] = useState<Form | null>(null);
-  const debouncedDraft = useDebounce(draft, SAVE_DEBOUNCE_MS);
   const hydrated = useRef(false);
+  const savedContentKey = useRef<string | null>(null);
 
   useEffect(() => {
     hydrated.current = false;
+    savedContentKey.current = null;
     setDraft(null);
   }, [formId]);
 
   useEffect(() => {
     if (data && !hydrated.current) {
       setDraft(data);
+      savedContentKey.current = formContentKey(data);
       hydrated.current = true;
     }
   }, [data]);
 
-  useEffect(() => {
-    if (!debouncedDraft || !formId || !hydrated.current) return;
-    if (debouncedDraft.id !== formId) return;
+  const isDirty =
+    draft !== null &&
+    savedContentKey.current !== null &&
+    formContentKey(draft) !== savedContentKey.current;
+
+  const canShare = draft !== null && isFormPublished(draft) && !isDirty;
+
+  const saveForm = useCallback(() => {
+    if (!draft || !formId) return;
 
     updateForm.mutate(
-      { title: debouncedDraft.title, questions: debouncedDraft.questions },
       {
+        title: draft.title,
+        questions: draft.questions,
+        status: "published",
+      },
+      {
+        onSuccess: (saved) => {
+          savedContentKey.current = formContentKey(saved);
+          setDraft(saved);
+          toast.add({ title: "Form saved", type: "success" });
+        },
         onError: () => {
           toast.add({
             title: "Could not save",
@@ -51,8 +70,7 @@ export function useBuilderPage() {
         },
       },
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- save when debounced draft settles; mutate is stable
-  }, [debouncedDraft, formId]);
+  }, [draft, formId, updateForm]);
 
   const setTitle = (title: string) => {
     setDraft((prev) => (prev ? { ...prev, title } : prev));
@@ -181,6 +199,7 @@ export function useBuilderPage() {
   };
 
   const copyShareLink = async () => {
+    if (!canShare) return;
     const url = `${window.location.origin}/forms/${formId}`;
     try {
       await navigator.clipboard.writeText(url);
@@ -195,8 +214,11 @@ export function useBuilderPage() {
     error,
     formId,
     isError,
+    isDirty,
+    canShare,
     isLoading: isPending,
     isSaving: updateForm.isPending,
+    saveForm,
     setTitle,
     addOption,
     removeOption,

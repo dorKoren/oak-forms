@@ -44,6 +44,7 @@ export class InMemoryStore {
       ...existing,
       title: input.title ?? existing.title,
       questions: input.questions ?? existing.questions,
+      status: input.status ?? existing.status,
       updatedAt: new Date().toISOString(),
     };
     this.forms.set(id, updated);
