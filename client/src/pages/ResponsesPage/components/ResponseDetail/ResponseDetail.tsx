@@ -1,21 +1,9 @@
 import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { Separator } from "@/components/ui/separator";
 import type { Form, Submission } from "@oak-forms/shared";
 import { formatAnswerForDisplay, formatSubmissionDateTime } from "../../ResponsesPage.utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogTrigger,
-  AlertDialogDescription,
-} from "@/components/ui/alert-dialog";
+import { ConfirmDeleteDialog } from "@/components/confirm";
 
 type ResponseDetailProps = {
   form: Form;
@@ -55,38 +43,17 @@ export default function ResponseDetail({
           <CardDescription>{formatSubmissionDateTime(submission.createdAt)}</CardDescription>
         </div>
 
-        <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-          <AlertDialogTrigger
-            render={<Button type="button" variant="outline" size="sm" disabled={isDeleting} />}
-          >
-            Delete
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete this response?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This cannot be undone. The answers will be removed from your form results.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-              <AlertDialogAction
-                variant="destructive"
-                disabled={isDeleting}
-                onClick={handleConfirmDelete}
-              >
-                {isDeleting ? (
-                  <>
-                    <Spinner data-icon="inline-start" className="size-3.5" />
-                    Deleting…
-                  </>
-                ) : (
-                  "Delete"
-                )}
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <ConfirmDeleteDialog
+          open={deleteOpen}
+          onOpenChange={setDeleteOpen}
+          isDeleting={isDeleting}
+          onConfirm={handleConfirmDelete}
+          title="Delete this response?"
+          description="This cannot be undone. The answers will be removed from your form results."
+          triggerLabel="Delete"
+          triggerVariant="outline"
+          triggerSize="sm"
+        />
       </CardHeader>
 
       <Separator />

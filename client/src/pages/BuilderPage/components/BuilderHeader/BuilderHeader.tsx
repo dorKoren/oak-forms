@@ -5,7 +5,7 @@ import SaveFormButton from "./SaveFormButton";
 import { Button } from "@/components/ui/button";
 import type { FormStatus } from "@oak-forms/shared";
 import PreviewFillButton from "./PreviewFillButton";
-import DeleteAlertDialog from "./DeleteAlertDialog";
+import { ConfirmDeleteDialog } from "@/components/confirm";
 import CopyShareLinkButton from "./CopyShareLinkButton";
 import { useBuilderHeaderActions } from "./BuilderHeader.hooks";
 import { AppBreadcrumb } from "@/components/navigation/AppBreadcrumb";
@@ -89,11 +89,15 @@ export default function BuilderHeader({
           Responses
         </Button>
 
-        <DeleteAlertDialog
+        <ConfirmDeleteDialog
           open={deleteOpen}
           isDeleting={isDeleting}
           onOpenChange={setDeleteOpen}
-          onConfirmDelete={handleConfirmDelete}
+          onConfirm={handleConfirmDelete}
+          title="Delete this form?"
+          description="This cannot be undone. The form and all responses will be permanently removed."
+          triggerLabel="Delete form"
+          triggerClassName="ml-auto"
         />
       </div>
     </header>
