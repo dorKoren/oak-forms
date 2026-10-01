@@ -1,9 +1,5 @@
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { TriangleAlertIcon } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
 
 type LoadErrorCardProps = {
@@ -12,19 +8,14 @@ type LoadErrorCardProps = {
   className?: string;
 };
 
-export default function LoadErrorCard({
-  title,
-  error,
-  className,
-}: LoadErrorCardProps) {
+export default function LoadErrorCard({ title, error, className }: LoadErrorCardProps) {
   return (
-    <Card className={cn("border-destructive/40 shadow-none", className)}>
-      <CardHeader>
-        <CardTitle className="text-lg">{title}</CardTitle>
-        <CardDescription>
-          {error instanceof Error ? error.message : "Something went wrong."}
-        </CardDescription>
-      </CardHeader>
-    </Card>
+    <Alert variant="destructive" className={cn("max-w-3xl shadow-none", className)}>
+      <TriangleAlertIcon />
+      <AlertTitle>{title}</AlertTitle>
+      <AlertDescription>
+        {error instanceof Error ? error.message : "Something went wrong."}
+      </AlertDescription>
+    </Alert>
   );
 }

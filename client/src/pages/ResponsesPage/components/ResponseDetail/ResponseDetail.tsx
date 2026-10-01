@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
-import type { Form, Submission } from "@oak-forms/shared";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { Separator } from "@/components/ui/separator";
+import type { Form, Submission } from "@oak-forms/shared";
+import { formatAnswerForDisplay, formatSubmissionDateTime } from "../../ResponsesPage.utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { formatAnswerForDisplay, formatSubmissionDateTime } from "../../ResponsesPage.utils";
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogFooter,
+  AlertDialogTitle,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogTrigger,
+  AlertDialogDescription,
+} from "@/components/ui/alert-dialog";
 
 type ResponseDetailProps = {
   form: Form;
@@ -52,52 +55,59 @@ export default function ResponseDetail({
           <CardDescription>{formatSubmissionDateTime(submission.createdAt)}</CardDescription>
         </div>
 
-        <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-          <DialogTrigger
-            render={
-              <Button type="button" variant="outline" size="sm" disabled={isDeleting} />
-            }
+        <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+          <AlertDialogTrigger
+            render={<Button type="button" variant="outline" size="sm" disabled={isDeleting} />}
           >
             Delete
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Delete this response?</DialogTitle>
-              <DialogDescription>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete this response?</AlertDialogTitle>
+              <AlertDialogDescription>
                 This cannot be undone. The answers will be removed from your form results.
-              </DialogDescription>
-            </DialogHeader>
-            <DialogFooter>
-              <DialogClose render={<Button type="button" variant="outline" disabled={isDeleting} />}>
-                Cancel
-              </DialogClose>
-              <Button
-                type="button"
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
                 variant="destructive"
                 disabled={isDeleting}
                 onClick={handleConfirmDelete}
               >
-                {isDeleting ? "Deleting…" : "Delete"}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+                {isDeleting ? (
+                  <>
+                    <Spinner data-icon="inline-start" className="size-3.5" />
+                    Deleting…
+                  </>
+                ) : (
+                  "Delete"
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <Separator />
+
+      <CardContent className="space-y-4 pt-6">
         {detailRows.length === 0 ? (
           <p className="text-muted-foreground">No questions on this form.</p>
         ) : (
-          detailRows.map(({ questionId, question }) => {
+          detailRows.map(({ questionId, question }, index) => {
             const title = question?.title ?? questionId;
             const value = submission.answers[questionId];
 
             return (
-              <div key={questionId} className="space-y-1 border-b border-border pb-4 last:border-0">
-                <p className="text-sm font-medium text-foreground">{title}</p>
-                <p className="text-sm whitespace-pre-wrap text-muted-foreground">
-                  {formatAnswerForDisplay(question, value)}
-                </p>
+              <div key={questionId} className="space-y-4">
+                {index > 0 ? <Separator /> : null}
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-foreground">{title}</p>
+                  <p className="text-sm whitespace-pre-wrap text-muted-foreground">
+                    {formatAnswerForDisplay(question, value)}
+                  </p>
+                </div>
               </div>
             );
           })

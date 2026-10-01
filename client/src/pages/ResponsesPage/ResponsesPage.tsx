@@ -1,12 +1,12 @@
-import { PageStatus } from "@/components/feedback";
 import { useResponsesPage } from "./ResponsesPage.hooks";
+import { PageLoadingSkeleton } from "@/components/feedback";
 import { ResponseDetail } from "./components/ResponseDetail";
 import { ResponsesTable } from "./components/ResponsesTable";
 import { ResponsesHeader } from "./components/ResponsesHeader";
 import { ResponsesLoadError } from "./components/ResponsesLoadError";
+import { ResponsesAnalytics } from "./components/ResponsesAnalytics";
 import { ResponsesEmptyState } from "./components/ResponsesEmptyState";
 import { ResponsesMissingFormId } from "./components/ResponsesMissingFormId";
-import { ResponsesAnalytics } from "./components/ResponsesAnalytics";
 
 export default function ResponsesPage() {
   const {
@@ -28,7 +28,7 @@ export default function ResponsesPage() {
   }
 
   if (isLoading || !form) {
-    return <PageStatus>Loading responses…</PageStatus>;
+    return <PageLoadingSkeleton variant="responses" />;
   }
 
   if (isError) {
@@ -45,20 +45,20 @@ export default function ResponsesPage() {
         <>
           <ResponsesAnalytics form={form} submissions={submissions} />
           <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-          <ResponsesTable
-            form={form}
-            selectedId={selectedId}
-            submissions={submissions}
-            onSelect={setSelectedId}
-          />
-          {selectedSubmission ? (
-            <ResponseDetail
+            <ResponsesTable
               form={form}
-              isDeleting={isDeleting}
-              onDelete={deleteSelected}
-              submission={selectedSubmission}
+              selectedId={selectedId}
+              onSelect={setSelectedId}
+              submissions={submissions}
             />
-          ) : null}
+            {selectedSubmission ? (
+              <ResponseDetail
+                form={form}
+                isDeleting={isDeleting}
+                onDelete={deleteSelected}
+                submission={selectedSubmission}
+              />
+            ) : null}
           </div>
         </>
       )}

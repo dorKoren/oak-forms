@@ -1,10 +1,19 @@
 import { useFillPage } from "./FillPage.hooks";
 import { Button } from "@/components/ui/button";
-import { LoadErrorCard, PageStatus } from "@/components/feedback";
-import { FillFormHeader } from "./components/FillFormHeader";
+import { ClipboardListIcon } from "lucide-react";
+import { Spinner } from "@/components/ui/spinner";
 import { FillPageShell } from "./components/FillPageShell";
+import { FillFormHeader } from "./components/FillFormHeader";
 import { FillQuestionField } from "./components/FillQuestionField";
 import { FillSubmittedView } from "./components/FillSubmittedView";
+import { LoadErrorCard, PageLoadingSkeleton, PageStatus } from "@/components/feedback";
+import {
+  Empty,
+  EmptyMedia,
+  EmptyTitle,
+  EmptyHeader,
+  EmptyDescription,
+} from "@/components/ui/empty";
 
 export default function FillPage() {
   const { formId, form, isLoading, isError, error, submitted, control, onSubmit, isSubmitting } =
@@ -15,7 +24,7 @@ export default function FillPage() {
   }
 
   if (isLoading || !form) {
-    return <PageStatus>Loading form…</PageStatus>;
+    return <PageLoadingSkeleton variant="fill" className="max-w-3xl" />;
   }
 
   if (isError) {
@@ -37,16 +46,31 @@ export default function FillPage() {
       <FillFormHeader title={form.title} questionCount={form.questions.length} />
 
       {form.questions.length === 0 ? (
-        <p className="text-muted-foreground">
-          The form owner needs to add questions in the builder.
-        </p>
+        <Empty className="border">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <ClipboardListIcon />
+            </EmptyMedia>
+            <EmptyTitle>No questions yet</EmptyTitle>
+            <EmptyDescription>
+              The form owner needs to add questions in the builder before you can submit answers.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       ) : (
         <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
           {form.questions.map((question) => (
             <FillQuestionField key={question.id} question={question} control={control} />
           ))}
           <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Submitting…" : "Submit"}
+            {isSubmitting ? (
+              <>
+                <Spinner data-icon="inline-start" className="size-3.5" />
+                Submitting…
+              </>
+            ) : (
+              "Submit"
+            )}
           </Button>
         </form>
       )}

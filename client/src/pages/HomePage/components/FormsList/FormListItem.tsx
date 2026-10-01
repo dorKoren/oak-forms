@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDate } from "../../HomePage.utils";
 import type { FormListItem as FormListItemType } from "@/api/forms";
@@ -20,10 +21,14 @@ export default function FormListItem({ form }: FormListItemProps) {
             {form.title}
           </Link>
         </CardTitle>
-        <CardDescription>
-          Updated {formatDate(form.updatedAt)} · {form.questions.length} question
-          {form.questions.length === 1 ? "" : "s"} · {form.submissionCount} response
-          {form.submissionCount === 1 ? "" : "s"}
+        <CardDescription className="flex flex-wrap items-center gap-2">
+          <Badge variant="outline">Updated {formatDate(form.updatedAt)}</Badge>
+          <Badge variant="secondary">
+            {form.questions.length} question{form.questions.length === 1 ? "" : "s"}
+          </Badge>
+          <Badge variant="secondary">
+            {form.submissionCount} response{form.submissionCount === 1 ? "" : "s"}
+          </Badge>
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-wrap gap-2 pt-0">

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { OakLogo } from "@/components/brand/OakLogo";
 
 type HomePageHeaderProps = {
@@ -17,7 +18,14 @@ export default function HomePageHeader({ onCreate, isCreating }: HomePageHeaderP
         <p className="text-lg text-muted-foreground">Build, share, and collect responses.</p>
       </div>
       <Button type="button" onClick={onCreate} disabled={isCreating}>
-        {isCreating ? "Creating…" : "New form"}
+        {isCreating ? (
+          <>
+            <Spinner data-icon="inline-start" className="size-3.5" />
+            Creating…
+          </>
+        ) : (
+          "New form"
+        )}
       </Button>
     </header>
   );

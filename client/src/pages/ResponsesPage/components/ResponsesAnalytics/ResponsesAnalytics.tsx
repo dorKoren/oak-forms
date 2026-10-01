@@ -1,13 +1,14 @@
+import { Progress } from "@/components/ui/progress";
 import type { Form, Submission } from "@oak-forms/shared";
+import { formatSubmissionDateTime } from "../../ResponsesPage.utils";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  buildQuestionAnalytics,
   buildResponseSummary,
+  buildQuestionAnalytics,
   type ChoiceQuestionAnalytics,
   type NumberQuestionAnalytics,
   type RatingQuestionAnalytics,
 } from "../../ResponsesPage.analytics";
-import { formatSubmissionDateTime } from "../../ResponsesPage.utils";
 
 type ResponsesAnalyticsProps = {
   form: Form;
@@ -92,12 +93,10 @@ function ChoiceCard({ item }: { item: ChoiceQuestionAnalytics }) {
                 {option.count} ({option.percent}%)
               </span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-primary transition-[width]"
-                style={{ width: `${option.percent}%` }}
-              />
-            </div>
+            <Progress
+              value={option.percent}
+              className="w-full [&_[data-slot=progress-track]]:h-2"
+            />
           </div>
         ))}
         <p className="text-sm text-muted-foreground">

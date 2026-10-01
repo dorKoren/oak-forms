@@ -1,10 +1,14 @@
+import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Switch } from "@/components/ui/switch";
+import { Separator } from "@/components/ui/separator";
+import { Field, FieldLabel } from "@/components/ui/field";
 import { questionHasOptions } from "../../BuilderPage.utils";
 import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   type Question,
   type QuestionType,
@@ -35,6 +39,25 @@ type QuestionEditorProps = {
   onOptionLabelChange: (optionId: string, label: string) => void;
 };
 
+function QuestionToolbarButton({
+  label,
+  children,
+  ...props
+}: React.ComponentProps<typeof Button> & { label: string }) {
+  return (
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button type="button" size="icon-sm" variant="ghost" aria-label={label} {...props} />
+        }
+      >
+        {children}
+      </TooltipTrigger>
+      <TooltipContent>{label}</TooltipContent>
+    </Tooltip>
+  );
+}
+
 export default function QuestionEditor({
   total,
   index,
@@ -53,44 +76,33 @@ export default function QuestionEditor({
   return (
     <Card className="shadow-none">
       <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0 pb-2">
-        <p className="text-sm text-muted-foreground">Question {index + 1}</p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-sm text-muted-foreground">Question {index + 1}</p>
+          {question.required ? <Badge variant="secondary">Required</Badge> : null}
+        </div>
 
         <div className="flex shrink-0 gap-1">
-          <Button
-            type="button"
-            size="icon-sm"
-            variant="ghost"
-            onClick={onMoveUp}
-            aria-label="Move up"
-            disabled={index === 0}
-          >
+          <QuestionToolbarButton label="Move up" onClick={onMoveUp} disabled={index === 0}>
             <ChevronUp />
-          </Button>
+          </QuestionToolbarButton>
 
-          <Button
-            type="button"
-            size="icon-sm"
-            variant="ghost"
+          <QuestionToolbarButton
+            label="Move down"
             onClick={onMoveDown}
-            aria-label="Move down"
             disabled={index >= total - 1}
           >
             <ChevronDown />
-          </Button>
+          </QuestionToolbarButton>
 
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            onClick={onRemove}
-            aria-label="Remove question"
-          >
+          <QuestionToolbarButton label="Remove question" onClick={onRemove}>
             <Trash2 />
-          </Button>
+          </QuestionToolbarButton>
         </div>
       </CardHeader>
 
-      <CardContent className="flex flex-col gap-4">
+      <Separator />
+
+      <CardContent className="flex flex-col gap-4 pt-6">
         <Input
           value={question.title}
           onChange={(e) => onTitleChange(e.target.value)}
@@ -98,10 +110,9 @@ export default function QuestionEditor({
           aria-label="Question title"
         />
 
-        <div className="flex flex-wrap items-center gap-4">
-          <div className="flex min-w-[12rem] flex-col gap-1.5">
-            <Label>Type</Label>
-
+        <div className="flex flex-wrap items-end gap-6">
+          <Field className="min-w-[12rem] flex-1">
+            <FieldLabel>Type</FieldLabel>
             <Select
               value={question.type}
               onValueChange={(value) => onTypeChange(value as QuestionType)}
@@ -109,7 +120,6 @@ export default function QuestionEditor({
               <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
-
               <SelectContent>
                 {QUESTION_TYPES.map((type) => (
                   <SelectItem key={type} value={type}>
@@ -118,25 +128,23 @@ export default function QuestionEditor({
                 ))}
               </SelectContent>
             </Select>
-          </div>
+          </Field>
 
-          <div className="flex items-center gap-2">
-            <Checkbox
+          <Field orientation="horizontal" className="items-center">
+            <Switch
               id={`required-${question.id}`}
               checked={question.required}
               onCheckedChange={(checked) => onRequiredChange(checked === true)}
             />
-
-            <Label htmlFor={`required-${question.id}`} className="font-normal">
+            <FieldLabel htmlFor={`required-${question.id}`} className="font-normal">
               Required
-            </Label>
-          </div>
+            </FieldLabel>
+          </Field>
         </div>
 
         {question.type === "rating" ? (
-          <div className="flex max-w-xs flex-col gap-1.5">
-            <Label htmlFor={`max-${question.id}`}>Max rating</Label>
-
+          <Field className="max-w-xs">
+            <FieldLabel htmlFor={`max-${question.id}`}>Max rating</FieldLabel>
             <Input
               min={1}
               max={10}
@@ -145,13 +153,13 @@ export default function QuestionEditor({
               id={`max-${question.id}`}
               onChange={(e) => onRatingMaxChange(Number.parseInt(e.target.value, 10) || 5)}
             />
-          </div>
+          </Field>
         ) : null}
 
         {questionHasOptions(question) ? (
           <div className="flex flex-col gap-2">
             <Label>Options</Label>
-
+            <Separator />
             {question.options.map((option) => (
               <div key={option.id} className="flex gap-2">
                 <Input
@@ -159,20 +167,25 @@ export default function QuestionEditor({
                   onChange={(e) => onOptionLabelChange(option.id, e.target.value)}
                   aria-label="Option label"
                 />
-
-                <Button
-                  type="button"
-                  size="icon-sm"
-                  variant="ghost"
-                  aria-label="Remove option"
-                  disabled={question.options.length <= 1}
-                  onClick={() => onRemoveOption(option.id)}
-                >
-                  <Trash2 />
-                </Button>
+                <Tooltip>
+                  <TooltipTrigger
+                    render={
+                      <Button
+                        type="button"
+                        size="icon-sm"
+                        variant="ghost"
+                        aria-label="Remove option"
+                        disabled={question.options.length <= 1}
+                        onClick={() => onRemoveOption(option.id)}
+                      />
+                    }
+                  >
+                    <Trash2 />
+                  </TooltipTrigger>
+                  <TooltipContent>Remove option</TooltipContent>
+                </Tooltip>
               </div>
             ))}
-
             <Button type="button" variant="outline" size="sm" onClick={onAddOption}>
               Add option
             </Button>

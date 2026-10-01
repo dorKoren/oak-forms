@@ -1,14 +1,18 @@
-import type * as React from "react";
-import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
+import { FieldLabel } from "@/components/ui/field";
 
-type FieldLabelProps = React.ComponentProps<typeof Label> & {
+type FieldLabelProps = React.ComponentProps<typeof FieldLabel> & {
   required?: boolean;
 };
 
-export default function FieldLabel({ className, children, required, ...props }: FieldLabelProps) {
+export default function FieldLabelAtom({
+  className,
+  children,
+  required,
+  ...props
+}: FieldLabelProps) {
   return (
-    <Label className={cn("group/field-label text-foreground", className)} {...props}>
+    <FieldLabel className={cn(className)} {...props}>
       {children}
       {required ? (
         <span className="text-destructive" aria-hidden="true">
@@ -16,6 +20,6 @@ export default function FieldLabel({ className, children, required, ...props }: 
           *
         </span>
       ) : null}
-    </Label>
+    </FieldLabel>
   );
 }

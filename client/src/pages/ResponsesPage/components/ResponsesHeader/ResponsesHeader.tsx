@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { AppBreadcrumb } from "@/components/navigation/AppBreadcrumb";
 
 type ResponsesHeaderProps = {
   formId: string;
@@ -9,25 +10,19 @@ type ResponsesHeaderProps = {
 export default function ResponsesHeader({ formId, title, responseCount }: ResponsesHeaderProps) {
   return (
     <header className="space-y-4 border-b border-border pb-8">
-      <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-        <Link to="/" className="hover:text-foreground">
-          ← Home
-        </Link>
-        <span aria-hidden="true">·</span>
-        <Link to={`/forms/${formId}/edit`} className="hover:text-foreground">
-          Edit form
-        </Link>
-        <span aria-hidden="true">·</span>
-        <Link to={`/forms/${formId}`} className="hover:text-foreground">
-          Fill form
-        </Link>
-      </div>
+      <AppBreadcrumb
+        items={[
+          { label: "Home", to: "/" },
+          { label: "Edit form", to: `/forms/${formId}/edit` },
+          { label: "Responses" },
+        ]}
+      />
 
-      <div className="space-y-2">
+      <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-3xl leading-tight">{title}</h1>
-        <p className="text-muted-foreground">
+        <Badge variant="secondary" className="tabular-nums">
           {responseCount} response{responseCount === 1 ? "" : "s"}
-        </p>
+        </Badge>
       </div>
     </header>
   );

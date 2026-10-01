@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
+import { AppBreadcrumb } from "@/components/navigation/AppBreadcrumb";
 
 type BuilderHeaderProps = {
   title: string;
@@ -19,18 +21,14 @@ export default function BuilderHeader({
 }: BuilderHeaderProps) {
   return (
     <header className="flex flex-col gap-4 border-b border-border pb-8">
-      <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
-        <Link to="/" className="hover:text-foreground">
-          ← Home
-        </Link>
-
-        <span aria-hidden="true">·</span>
-
-        <Link to={`/forms/${formId}/responses`} className="hover:text-foreground">
-          Responses
-        </Link>
-
-        {isSaving ? <span className="ml-auto">Saving…</span> : null}
+      <div className="flex flex-wrap items-center gap-3">
+        <AppBreadcrumb items={[{ label: "Home", to: "/" }, { label: "Edit form" }]} />
+        {isSaving ? (
+          <span className="ml-auto flex items-center gap-2 text-sm text-muted-foreground">
+            <Spinner className="size-3.5" />
+            Saving…
+          </span>
+        ) : null}
       </div>
 
       <Input
@@ -52,6 +50,15 @@ export default function BuilderHeader({
           render={<Link to={`/forms/${formId}`} target="_blank" rel="noreferrer" />}
         >
           Preview fill
+        </Button>
+
+        <Button
+          type="button"
+          variant="ghost"
+          nativeButton={false}
+          render={<Link to={`/forms/${formId}/responses`} />}
+        >
+          Responses
         </Button>
       </div>
     </header>

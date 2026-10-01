@@ -1,5 +1,14 @@
+import { FileTextIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardTitle, CardHeader, CardContent, CardDescription } from "@/components/ui/card";
+import { Spinner } from "@/components/ui/spinner";
+import {
+  Empty,
+  EmptyTitle,
+  EmptyMedia,
+  EmptyHeader,
+  EmptyContent,
+  EmptyDescription,
+} from "@/components/ui/empty";
 
 type FormsEmptyStateProps = {
   onCreate: () => void;
@@ -8,16 +17,28 @@ type FormsEmptyStateProps = {
 
 export default function FormsEmptyState({ onCreate, isCreating }: FormsEmptyStateProps) {
   return (
-    <Card className="border-dashed shadow-none">
-      <CardHeader>
-        <CardTitle className="text-xl">No forms yet</CardTitle>
-        <CardDescription>Create your first form to add questions and share a link.</CardDescription>
-      </CardHeader>
-      <CardContent>
+    <Empty className="border">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <FileTextIcon />
+        </EmptyMedia>
+        <EmptyTitle>No forms yet</EmptyTitle>
+        <EmptyDescription>
+          Create your first form to add questions and share a link.
+        </EmptyDescription>
+      </EmptyHeader>
+      <EmptyContent>
         <Button type="button" onClick={onCreate} disabled={isCreating}>
-          Create a form
+          {isCreating ? (
+            <>
+              <Spinner data-icon="inline-start" className="size-3.5" />
+              Creating…
+            </>
+          ) : (
+            "Create a form"
+          )}
         </Button>
-      </CardContent>
-    </Card>
+      </EmptyContent>
+    </Empty>
   );
 }

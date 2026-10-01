@@ -1,18 +1,17 @@
+"use client";
+
 import {
   Controller,
   type Control,
-  type ControllerRenderProps,
   type FieldPath,
   type FieldValues,
+  type ControllerRenderProps,
 } from "react-hook-form";
 import { useId } from "react";
-import { FieldError, FieldHint, FieldLabel } from "@/components/design-system/atoms";
 import { cn } from "@/lib/utils";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 
-type FormFieldProps<
-  TFieldValues extends FieldValues,
-  TName extends FieldPath<TFieldValues>,
-> = {
+type FormFieldProps<TFieldValues extends FieldValues, TName extends FieldPath<TFieldValues>> = {
   control: Control<TFieldValues>;
   name: TName;
   label: string;
@@ -32,10 +31,10 @@ export default function FormField<
   TFieldValues extends FieldValues,
   TName extends FieldPath<TFieldValues>,
 >({
-  control,
+  hint,
   name,
   label,
-  hint,
+  control,
   required,
   className,
   children,
@@ -54,24 +53,27 @@ export default function FormField<
           .join(" ");
 
         return (
-          <div
-            className={cn("group/field space-y-2", className)}
-            data-invalid={fieldState.invalid || undefined}
-          >
-            <FieldLabel htmlFor={baseId} required={required}>
+          <Field className={cn(className)} data-invalid={fieldState.invalid || undefined}>
+            <FieldLabel htmlFor={baseId}>
               {label}
+              {required ? (
+                <span className="text-destructive" aria-hidden="true">
+                  {" "}
+                  *
+                </span>
+              ) : null}
             </FieldLabel>
-            {hint ? <FieldHint id={hintId}>{hint}</FieldHint> : null}
             {children({
               ...field,
               id: baseId,
               "aria-invalid": fieldState.invalid || undefined,
               "aria-describedby": describedBy || undefined,
             })}
+            {hint ? <FieldDescription id={hintId}>{hint}</FieldDescription> : null}
             {fieldState.error?.message ? (
               <FieldError id={errorId}>{fieldState.error.message}</FieldError>
             ) : null}
-          </div>
+          </Field>
         );
       }}
     />

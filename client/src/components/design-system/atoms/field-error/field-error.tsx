@@ -1,18 +1,9 @@
-import type * as React from "react";
+import { FieldError } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
-export default function FieldError({
+export default function FieldErrorAtom({
   className,
-  id,
   ...props
-}: React.ComponentProps<"p"> & { id?: string }) {
-  return (
-    <p
-      id={id}
-      role="alert"
-      className={cn("text-sm text-destructive", className)}
-      {...props}
-    />
-  );
+}: React.ComponentProps<typeof FieldError>) {
+  return <FieldError className={cn(className)} {...props} />;
 }
-

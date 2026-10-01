@@ -1,5 +1,5 @@
-import { PageStatus } from "@/components/feedback";
+import { PageLoadingSkeleton } from "@/components/feedback";
 
 export default function BuilderLoading() {
-  return <PageStatus>Loading form…</PageStatus>;
+  return <PageLoadingSkeleton variant="builder" className="max-w-3xl" />;
 }
