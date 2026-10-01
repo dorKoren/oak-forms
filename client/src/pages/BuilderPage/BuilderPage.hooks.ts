@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
 import { toast } from "@/components/ui/toast";
 import { isFormPublished } from "@oak-forms/shared";
+import { useEffect, useRef, useState } from "react";
 import type { Form, QuestionType } from "@oak-forms/shared";
 import { useFormQuery, useUpdateFormMutation } from "@/api";
-import { useCallback, useEffect, useRef, useState } from "react";
 import {
   addQuestion,
   moveQuestion,
@@ -25,12 +25,14 @@ export function useBuilderPage() {
   const hydrated = useRef(false);
   const savedContentKey = useRef<string | null>(null);
 
+  // Route changed: drop the previous form’s draft so we re-hydrate from the new query result.
   useEffect(() => {
     hydrated.current = false;
     savedContentKey.current = null;
     setDraft(null);
   }, [formId]);
 
+  // First fetch for this formId: seed local draft and the baseline used for dirty detection.
   useEffect(() => {
     if (data && !hydrated.current) {
       setDraft(data);
@@ -46,7 +48,7 @@ export function useBuilderPage() {
 
   const canShare = draft !== null && isFormPublished(draft) && !isDirty;
 
-  const saveForm = useCallback(() => {
+  const saveForm = () => {
     if (!draft || !formId) return;
 
     updateForm.mutate(
@@ -70,7 +72,7 @@ export function useBuilderPage() {
         },
       },
     );
-  }, [draft, formId, updateForm]);
+  };
 
   const setTitle = (title: string) => {
     setDraft((prev) => (prev ? { ...prev, title } : prev));

@@ -5,7 +5,14 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   // Root + workspace can resolve different Vite type versions; runtime is fine.
-  plugins: [react(), tailwindcss()] as import("vite").PluginOption[],
+  plugins: [
+    react({
+      babel: {
+        plugins: ["babel-plugin-react-compiler"],
+      },
+    }),
+    tailwindcss(),
+  ] as import("vite").PluginOption[],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

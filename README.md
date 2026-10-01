@@ -59,7 +59,7 @@ Server workspace:
 
 ```
 oak-forms/
-├── client/          # Vite + React 19 + TypeScript + Tailwind 4
+├── client/          # Vite + React 19 + React Compiler + TypeScript + Tailwind 4
 ├── server/          # Express API + in-memory store
 └── shared/          # Zod schemas and types (forms, questions, submissions)
 ```
