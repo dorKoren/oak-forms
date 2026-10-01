@@ -1,20 +1,11 @@
 import { useFillPage } from "./FillPage.hooks";
-import { Button } from "@/components/ui/button";
-import { ClipboardListIcon } from "lucide-react";
-import { Spinner } from "@/components/ui/spinner";
 import { isFormPublished } from "@oak-forms/shared";
 import { FillPageShell } from "./components/FillPageShell";
 import { FillFormHeader } from "./components/FillFormHeader";
-import { FillQuestionField } from "./components/FillQuestionField";
+import { FillEmptyState } from "./components/FillEmptyState";
+import { FillQuestionsForm } from "./components/FillQuestionsForm";
 import { FillSubmittedView } from "./components/FillSubmittedView";
 import { LoadErrorCard, PageLoadingSkeleton, PageStatus } from "@/components/feedback";
-import {
-  Empty,
-  EmptyMedia,
-  EmptyTitle,
-  EmptyHeader,
-  EmptyDescription,
-} from "@/components/ui/empty";
 
 export default function FillPage() {
   const { formId, form, isLoading, isError, error, submitted, control, onSubmit, isSubmitting } =
@@ -45,18 +36,10 @@ export default function FillPage() {
   if (!isFormPublished(form)) {
     return (
       <FillPageShell>
-        <Empty className="border">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <ClipboardListIcon />
-            </EmptyMedia>
-            <EmptyTitle>Form not available</EmptyTitle>
-            <EmptyDescription>
-              This form is still a draft. The owner needs to save it in the builder before you can
-              respond.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
+        <FillEmptyState
+          title="Form not available"
+          description="This form is still a draft. The owner needs to save it in the builder before you can respond."
+        />
       </FillPageShell>
     );
   }
@@ -66,33 +49,17 @@ export default function FillPage() {
       <FillFormHeader title={form.title} questionCount={form.questions.length} />
 
       {form.questions.length === 0 ? (
-        <Empty className="border">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <ClipboardListIcon />
-            </EmptyMedia>
-            <EmptyTitle>No questions yet</EmptyTitle>
-            <EmptyDescription>
-              The form owner needs to add questions in the builder before you can submit answers.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
+        <FillEmptyState
+          title="No questions yet"
+          description="The form owner needs to add questions in the builder before you can submit answers."
+        />
       ) : (
-        <form className="flex flex-col gap-6" onSubmit={onSubmit} noValidate>
-          {form.questions.map((question) => (
-            <FillQuestionField key={question.id} question={question} control={control} />
-          ))}
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Spinner data-icon="inline-start" className="size-3.5" />
-                Submitting…
-              </>
-            ) : (
-              "Submit"
-            )}
-          </Button>
-        </form>
+        <FillQuestionsForm
+          control={control}
+          onSubmit={onSubmit}
+          questions={form.questions}
+          isSubmitting={isSubmitting}
+        />
       )}
     </FillPageShell>
   );
