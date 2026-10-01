@@ -1,13 +1,11 @@
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { ChevronDown, ChevronUp, Trash2 } from "lucide-react";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { NumberField, SwitchField } from "@/components/form";
-import type { Question, QuestionType } from "@oak-forms/shared";
-import QuestionToolbarButton from "./QuestionToolbarButton";
 import QuestionTypeSelect from "./QuestionTypeSelect";
+import { Card, CardContent } from "@/components/ui/card";
+import QuestionEditorHeader from "./QuestionEditorHeader";
+import { NumberField, SwitchField } from "@/components/form";
 import QuestionOptionsSection from "./QuestionOptionsSection";
+import type { Question, QuestionType } from "@oak-forms/shared";
 
 type QuestionEditorProps = {
   question: Question;
@@ -42,30 +40,14 @@ export default function QuestionEditor({
 }: QuestionEditorProps) {
   return (
     <Card className="shadow-none">
-      <CardHeader className="flex flex-row items-start justify-between gap-2 space-y-0 pb-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <p className="text-sm text-muted-foreground">Question {index + 1}</p>
-          {question.required ? <Badge variant="secondary">Required</Badge> : null}
-        </div>
-
-        <div className="flex shrink-0 gap-1">
-          <QuestionToolbarButton label="Move up" onClick={onMoveUp} disabled={index === 0}>
-            <ChevronUp />
-          </QuestionToolbarButton>
-
-          <QuestionToolbarButton
-            label="Move down"
-            onClick={onMoveDown}
-            disabled={index >= total - 1}
-          >
-            <ChevronDown />
-          </QuestionToolbarButton>
-
-          <QuestionToolbarButton label="Remove question" onClick={onRemove}>
-            <Trash2 />
-          </QuestionToolbarButton>
-        </div>
-      </CardHeader>
+      <QuestionEditorHeader
+        index={index}
+        total={total}
+        required={question.required}
+        onMoveUp={onMoveUp}
+        onRemove={onRemove}
+        onMoveDown={onMoveDown}
+      />
 
       <Separator />
 
