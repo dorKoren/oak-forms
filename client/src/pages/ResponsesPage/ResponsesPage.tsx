@@ -4,8 +4,7 @@ import { ResponsesTable } from "./components/ResponsesTable";
 import { ResponsesHeader } from "./components/ResponsesHeader";
 import { ResponsesAnalytics } from "./components/ResponsesAnalytics";
 import { ResponsesEmptyState } from "./components/ResponsesEmptyState";
-import { LoadErrorCard, PageLoadingSkeleton } from "@/components/feedback";
-import { ResponsesMissingFormId } from "./components/ResponsesMissingFormId";
+import { LoadErrorCard, PageLoadingSkeleton, PageStatus } from "@/components/feedback";
 
 export default function ResponsesPage() {
   const {
@@ -22,7 +21,7 @@ export default function ResponsesPage() {
     deleteSelected,
   } = useResponsesPage();
 
-  if (!formId) return <ResponsesMissingFormId />;
+  if (!formId) return <PageStatus>Missing form id.</PageStatus>;
 
   if (isLoading || !form) return <PageLoadingSkeleton variant="responses" />;
 
