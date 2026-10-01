@@ -1,6 +1,6 @@
 import { useBuilderPage } from "./BuilderPage.hooks";
 import { BuilderHeader } from "./components/BuilderHeader";
-import { BuilderLoading } from "./components/BuilderLoading";
+import { PageLoadingSkeleton } from "@/components/feedback";
 import { QuestionEditor } from "./components/QuestionEditor";
 import { BuilderLoadError } from "./components/BuilderLoadError";
 import { AddQuestionControl } from "./components/AddQuestionControl";
@@ -36,7 +36,7 @@ export default function BuilderPage() {
   }
 
   if (isLoading || !draft) {
-    return <BuilderLoading />;
+    return <PageLoadingSkeleton variant="builder" className="max-w-3xl" />;
   }
 
   if (isError) {
