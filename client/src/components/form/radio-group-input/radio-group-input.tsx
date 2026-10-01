@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import type { Option } from "@oak-forms/shared";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 type RadioGroupInputProps = {
   options: Option[];
@@ -23,35 +24,28 @@ export default function RadioGroupInput({
   ...aria
 }: RadioGroupInputProps) {
   return (
-    <div
+    <RadioGroup
       id={id}
-      role="radiogroup"
-      data-slot="radio-group"
-      className={cn("flex flex-col gap-3", className)}
+      disabled={disabled}
+      value={value ?? null}
+      onValueChange={(next) => {
+        if (next != null) onValueChange?.(String(next));
+      }}
+      className={cn("gap-3", className)}
       aria-invalid={aria["aria-invalid"]}
       aria-describedby={aria["aria-describedby"]}
     >
       {options.map((option) => {
         const itemId = `${id ?? "radio"}-${option.id}`;
-        const checked = value === option.id;
         return (
           <div key={option.id} className="flex items-center gap-2">
-            <input
-              type="radio"
-              id={itemId}
-              name={id}
-              value={option.id}
-              checked={checked}
-              disabled={disabled}
-              className="size-4 shrink-0 cursor-pointer accent-primary disabled:cursor-not-allowed disabled:opacity-50"
-              onChange={() => onValueChange?.(option.id)}
-            />
+            <RadioGroupItem value={option.id} id={itemId} aria-invalid={aria["aria-invalid"]} />
             <Label htmlFor={itemId} className="cursor-pointer font-normal">
               {option.label}
             </Label>
           </div>
         );
       })}
-    </div>
+    </RadioGroup>
   );
 }
