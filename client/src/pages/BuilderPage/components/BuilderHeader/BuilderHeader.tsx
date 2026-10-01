@@ -1,12 +1,10 @@
-import { useState } from "react";
-import { useDeleteFormMutation } from "@/api";
+import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { Link, useNavigate } from "react-router-dom";
 import type { FormStatus } from "@oak-forms/shared";
-import { isFormPublished } from "@oak-forms/shared";
+import { useBuilderHeaderActions } from "./BuilderHeader.hooks";
 import { AppBreadcrumb } from "@/components/navigation/AppBreadcrumb";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
@@ -46,35 +44,22 @@ export default function BuilderHeader({
   onTitleChange,
   onCopyShareLink,
 }: BuilderHeaderProps) {
-  const navigate = useNavigate();
-  const deleteForm = useDeleteFormMutation();
-  const [deleteOpen, setDeleteOpen] = useState(false);
-
-  const hasPendingSave = isDirty || !isFormPublished({ status });
-  const canSave = hasPendingSave && hasQuestions;
-  const shareDisabledReason = !hasQuestions
-    ? "Add at least one question before you can save and share."
-    : !isFormPublished({ status })
-      ? "Save the form to publish and share a link."
-      : isDirty
-        ? "Save your changes before sharing."
-        : null;
-
-  const handleConfirmDelete = () => {
-    deleteForm.mutate(formId, {
-      onSuccess: () => {
-        setDeleteOpen(false);
-        navigate("/");
-      },
-    });
-  };
+  const {
+    canSave,
+    isPublished,
+    shareDisabledReason,
+    deleteOpen,
+    setDeleteOpen,
+    handleConfirmDelete,
+    isDeleting,
+  } = useBuilderHeaderActions({ formId, status, isDirty, hasQuestions });
 
   return (
     <header className="flex flex-col gap-4 border-b border-border pb-8">
       <div className="flex flex-wrap items-center gap-3">
         <AppBreadcrumb items={[{ label: "Home", to: "/" }, { label: "Edit form" }]} />
-        <Badge variant={isFormPublished({ status }) ? "secondary" : "outline"}>
-          {isFormPublished({ status }) ? "Published" : "Draft"}
+        <Badge variant={isPublished ? "secondary" : "outline"}>
+          {isPublished ? "Published" : "Draft"}
         </Badge>
         {isDirty ? (
           <Badge variant="outline" className="text-muted-foreground">
@@ -161,7 +146,7 @@ export default function BuilderHeader({
                 type="button"
                 variant="destructive"
                 className="ml-auto"
-                disabled={deleteForm.isPending}
+                disabled={isDeleting}
               />
             }
           >
@@ -175,13 +160,13 @@ export default function BuilderHeader({
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={deleteForm.isPending}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 variant="destructive"
-                disabled={deleteForm.isPending}
+                disabled={isDeleting}
                 onClick={handleConfirmDelete}
               >
-                {deleteForm.isPending ? (
+                {isDeleting ? (
                   <>
                     <Spinner data-icon="inline-start" className="size-3.5" />
                     Deleting…
