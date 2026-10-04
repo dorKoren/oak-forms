@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
+import { PageLead } from "@/components/typography";
 import { OakLogo } from "@/components/brand/OakLogo";
 
 type HomePageHeaderProps = {
@@ -20,7 +21,7 @@ export default function HomePageHeader({
           <OakLogo className="h-9 text-foreground" />
           <span>Forms</span>
         </h1>
-        <p className="text-lg text-muted-foreground">Build, share, and collect responses.</p>
+        <PageLead size="lg">Build, share, and collect responses.</PageLead>
       </div>
       {showCreateButton ? (
         <Button type="button" onClick={onCreate} disabled={isCreating}>

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { PageTitle } from "@/components/typography";
 import type { Form, Submission } from "@oak-forms/shared";
 import { AppBreadcrumb } from "@/components/navigation/AppBreadcrumb";
 import { ExportResponsesCsvButton } from "./ExportResponsesCsvButton";
@@ -30,7 +31,7 @@ export default function ResponsesHeader({
 
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-3xl leading-tight">{title}</h1>
+          <PageTitle>{title}</PageTitle>
           <Badge variant="secondary" className="tabular-nums">
             {responseCount} response{responseCount === 1 ? "" : "s"}
           </Badge>

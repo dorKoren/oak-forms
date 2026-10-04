@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -5,9 +6,10 @@ import SaveFormButton from "./SaveFormButton";
 import { Button } from "@/components/ui/button";
 import type { FormStatus } from "@oak-forms/shared";
 import PreviewFillButton from "./PreviewFillButton";
-import { ConfirmDeleteDialog } from "@/components/confirm";
 import CopyShareLinkButton from "./CopyShareLinkButton";
+import { ConfirmDeleteDialog } from "@/components/confirm";
 import { useBuilderHeaderActions } from "./BuilderHeader.hooks";
+import { formPageTitleClassName } from "@/components/typography";
 import { AppBreadcrumb } from "@/components/navigation/AppBreadcrumb";
 
 type BuilderHeaderProps = {
@@ -62,7 +64,10 @@ export default function BuilderHeader({
       <Input
         value={title}
         onChange={(e) => onTitleChange(e.target.value)}
-        className="h-auto min-h-0 border-0 bg-transparent px-2 py-1 text-3xl leading-tight tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 font-[family-name:var(--font-headline)] font-normal md:text-3xl"
+        className={cn(
+          formPageTitleClassName,
+          "h-auto min-h-0 border-0 bg-transparent px-2 py-1 tracking-tight shadow-none focus-visible:border-transparent focus-visible:ring-0 font-[family-name:var(--font-headline)] font-normal md:text-3xl",
+        )}
         aria-label="Form title"
       />
 
