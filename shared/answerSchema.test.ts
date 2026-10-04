@@ -13,26 +13,20 @@ const baseForm = (questions: Form["questions"]): Form => ({
 
 describe("buildAnswerSchema", () => {
   it("requires non-empty short text when required", () => {
-    const form = baseForm([
-      { id: "q1", type: "short_text", title: "Name", required: true },
-    ]);
+    const form = baseForm([{ id: "q1", type: "short_text", title: "Name", required: true }]);
     const schema = buildAnswerSchema(form);
     expect(schema.safeParse({ q1: "" }).success).toBe(false);
     expect(schema.safeParse({ q1: "Ada" }).success).toBe(true);
   });
 
   it("allows omitting optional fields", () => {
-    const form = baseForm([
-      { id: "q1", type: "short_text", title: "Name", required: false },
-    ]);
+    const form = baseForm([{ id: "q1", type: "short_text", title: "Name", required: false }]);
     const schema = buildAnswerSchema(form);
     expect(schema.safeParse({}).success).toBe(true);
   });
 
   it("coerces number answers", () => {
-    const form = baseForm([
-      { id: "q1", type: "number", title: "Age", required: true },
-    ]);
+    const form = baseForm([{ id: "q1", type: "number", title: "Age", required: true }]);
     const schema = buildAnswerSchema(form);
     const result = schema.safeParse({ q1: "42" });
     expect(result.success).toBe(true);
@@ -60,9 +54,7 @@ describe("buildAnswerSchema", () => {
   });
 
   it("enforces rating bounds", () => {
-    const form = baseForm([
-      { id: "q1", type: "rating", title: "Rate", required: true, max: 5 },
-    ]);
+    const form = baseForm([{ id: "q1", type: "rating", title: "Rate", required: true, max: 5 }]);
     const schema = buildAnswerSchema(form);
     expect(schema.safeParse({ q1: 0 }).success).toBe(false);
     expect(schema.safeParse({ q1: 6 }).success).toBe(false);
@@ -88,9 +80,7 @@ describe("buildAnswerSchema", () => {
   });
 
   it("accepts ISO date strings for date fields", () => {
-    const form = baseForm([
-      { id: "q1", type: "date", title: "When", required: true },
-    ]);
+    const form = baseForm([{ id: "q1", type: "date", title: "When", required: true }]);
     const schema = buildAnswerSchema(form);
     expect(schema.safeParse({ q1: "2025-10-01" }).success).toBe(true);
   });

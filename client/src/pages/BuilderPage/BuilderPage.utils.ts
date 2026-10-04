@@ -1,8 +1,4 @@
-import {
-  createDefaultQuestion,
-  type Question,
-  type QuestionType,
-} from "@oak-forms/shared";
+import { createDefaultQuestion, type Question, type QuestionType } from "@oak-forms/shared";
 
 export function moveQuestion(
   questions: Question[],
@@ -26,10 +22,7 @@ export function updateQuestion(
   return questions.map((q) => (q.id === questionId ? updater(q) : q));
 }
 
-export function changeQuestionType(
-  question: Question,
-  type: QuestionType,
-): Question {
+export function changeQuestionType(question: Question, type: QuestionType): Question {
   const defaults = createDefaultQuestion(type, question.id);
   return { ...defaults, title: question.title, required: question.required };
 }
