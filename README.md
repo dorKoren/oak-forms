@@ -7,7 +7,7 @@ A small Google Forms–style app: create forms in a builder, share a fill link, 
 - **Home** — list forms, create new, jump to edit / fill / responses
 - **Builder** — title, question types, options, required flags, reorder; **Save** publishes the form (draft until saved)
 - **Fill** — dynamic Zod validation from the form schema, submit answers
-- **Responses** — table + detail, delete with confirmation, KPIs for ratings, numbers, and choice questions
+- **Responses** — table + detail, delete with confirmation, KPIs for ratings, numbers, and choice questions, **Export CSV**
 
 Question types: short text, paragraph, number, date, select, radio buttons, multi-select (dropdown), checkboxes, rating.
 

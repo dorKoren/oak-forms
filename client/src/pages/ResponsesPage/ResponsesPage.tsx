@@ -8,11 +8,11 @@ import { ResponsesTable } from "./components/ResponsesTable";
 import { ResponsesHeader } from "./components/ResponsesHeader";
 import { ResponsesAnalytics } from "./components/ResponsesAnalytics";
 import {
-  FormNotFoundState,
+  PageStatus,
   LoadErrorCard,
   PageEmptyState,
+  FormNotFoundState,
   PageLoadingSkeleton,
-  PageStatus,
 } from "@/components/feedback";
 
 export default function ResponsesPage() {
@@ -49,7 +49,13 @@ export default function ResponsesPage() {
 
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-12">
-      <ResponsesHeader formId={formId} title={form.title} responseCount={submissions.length} />
+      <ResponsesHeader
+        form={form}
+        formId={formId}
+        title={form.title}
+        submissions={submissions}
+        responseCount={submissions.length}
+      />
 
       {submissions.length === 0 ? (
         <PageEmptyState

@@ -22,7 +22,6 @@ export function useResponsesPage() {
 
   const deleteSubmission = useDeleteSubmissionMutation(formId);
   const [selectedId, setSelectedId] = useState<string | null>(null);
-
   const sortedSubmissions = submissions ? sortSubmissionsNewestFirst(submissions) : [];
 
   const selectedSubmission =
